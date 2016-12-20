@@ -21,7 +21,14 @@ namespace RtwfApp
 				ControlStyles.AllPaintingInWmPaint |
 				ControlStyles.UserPaint,
 				true);
-			this.BackColor = Color.DarkGreen;
+		}
+
+		/// <summary>
+		/// Set current time to given one.
+		/// </summary>
+		/// <param name="time">Time given.</param>
+		public void Shift(long time)
+		{
 		}
 
 		protected override void OnPaint(PaintEventArgs pe)

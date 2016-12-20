@@ -28,7 +28,13 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			components = new System.ComponentModel.Container();
+			this.SuspendLayout();
+			// 
+			// MovingGraphControl
+			// 
+			this.BackColor = System.Drawing.Color.DarkGreen;
+			this.ResumeLayout(false);
+
 		}
 
 		#endregion

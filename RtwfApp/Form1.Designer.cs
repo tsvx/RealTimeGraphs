@@ -28,17 +28,26 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.movingGraphControl1 = new RtwfApp.MovingGraphControl();
+			this.timer1 = new System.Windows.Forms.Timer(this.components);
 			this.SuspendLayout();
 			// 
 			// movingGraphControl1
 			// 
+			this.movingGraphControl1.BackColor = System.Drawing.Color.DarkGreen;
 			this.movingGraphControl1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.movingGraphControl1.Location = new System.Drawing.Point(0, 0);
 			this.movingGraphControl1.Name = "movingGraphControl1";
 			this.movingGraphControl1.Size = new System.Drawing.Size(945, 449);
 			this.movingGraphControl1.TabIndex = 0;
 			this.movingGraphControl1.Text = "movingGraphControl1";
+			// 
+			// timer1
+			// 
+			this.timer1.Enabled = true;
+			this.timer1.Interval = 10;
+			this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
 			// 
 			// Form1
 			// 
@@ -55,6 +64,7 @@
 		#endregion
 
 		private MovingGraphControl movingGraphControl1;
+		private System.Windows.Forms.Timer timer1;
 	}
 }
 

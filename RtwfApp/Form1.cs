@@ -15,5 +15,10 @@ namespace RtwfApp
 		{
 			InitializeComponent();
 		}
+
+		private void timer1_Tick(object sender, EventArgs e)
+		{
+			movingGraphControl1.Shift(0);
+		}
 	}
 }

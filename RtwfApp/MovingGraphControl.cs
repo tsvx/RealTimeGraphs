@@ -11,8 +11,12 @@ namespace RtwfApp
 {
 	public partial class MovingGraphControl : Control
 	{
+		long prevTime; // 100ns-ticks
+		double timeScale; // ticks-per-pixel
+
 		public MovingGraphControl()
 		{
+			prevTime = -1;
 			InitializeComponent();
 			this.SetStyle(
 				ControlStyles.OptimizedDoubleBuffer |
@@ -26,7 +30,7 @@ namespace RtwfApp
 		/// <summary>
 		/// Set current time to given one.
 		/// </summary>
-		/// <param name="time">Time given.</param>
+		/// <param name="time">Time given in 100ns-ticks.</param>
 		public void Shift(long time)
 		{
 		}

@@ -18,7 +18,7 @@ namespace RtwfApp
 
 		private void timer1_Tick(object sender, EventArgs e)
 		{
-			movingGraphControl1.Shift(0);
+			movingGraphControl1.Shift(DateTime.UtcNow.Ticks);
 		}
 	}
 }

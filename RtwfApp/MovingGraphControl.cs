@@ -11,8 +11,8 @@ namespace RtwfApp
 {
 	public partial class MovingGraphControl : Control
 	{
-		long prevTime; // 100ns-ticks
-		double timeScale; // ticks-per-pixel
+		long prevTime, curTime; // 100ns-ticks
+		const double timeScale = 500 * 25400 / 96.0; // ticks-per-pixel, = 500 ms/cm
 
 		public MovingGraphControl()
 		{
@@ -33,11 +33,18 @@ namespace RtwfApp
 		/// <param name="time">Time given in 100ns-ticks.</param>
 		public void Shift(long time)
 		{
+			curTime = time;
+			Invalidate();
 		}
 
 		protected override void OnPaint(PaintEventArgs pe)
 		{
-			base.OnPaint(pe);
+			DrawAll(pe.Graphics);
+			prevTime = curTime;
+		}
+
+		void DrawAll(Graphics g)
+		{
 		}
 	}
 }

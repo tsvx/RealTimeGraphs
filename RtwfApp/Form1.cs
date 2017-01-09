@@ -12,31 +12,14 @@ namespace RtwfApp
 {
 	public partial class Form1 : Form
 	{
-		const int N = 60000; // point in the data
-		const int M = 50;	  // graphics on the plot
-		double[] data;
 		int prevFrames;
-
-		void InitData()
-		{
-			data = new double[N];
-			var rnd = new Random();
-			double x = 0, v = 0, min = 0, max = 0;
-			for (int i = 0; i < N; i++)
-			{
-				if (x < min) min = x;
-				if (x > max) max = x;
-				data[i] = x;
-				x += v / 1000;
-				v += (rnd.NextDouble() - 0.5) / 1000;
-			}
-			for (int i = 0; i < N; i++)
-				data[i] = (data[i] - min) / (max - min);
-		}
+		TestData data;
 
 		public Form1()
 		{
 			InitializeComponent();
+			data = new TestData(60000, 50);
+			movingGraphControl1.Data = data;
 		}
 
 		private void timer1_Tick(object sender, EventArgs e)

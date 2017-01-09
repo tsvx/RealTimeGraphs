@@ -16,6 +16,8 @@ namespace RtwfApp
 
 		public int FramesNum { get; private set; }
 
+		public IData Data;
+
 		public MovingGraphControl()
 		{
 			prevTime = curTime = -1;

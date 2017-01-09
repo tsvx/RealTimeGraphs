@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -11,7 +12,7 @@ namespace RtwfApp
 {
 	public partial class MovingGraphControl : Control
 	{
-		long prevTime, curTime; // 100ns-ticks
+		long prevTime, curTime; // 100ns ticks
 		const double timeScale = 500 * 25400 / 96.0; // ticks-per-pixel, = 500 ms/cm
 
 		public int FramesNum { get; private set; }
@@ -50,6 +51,15 @@ namespace RtwfApp
 
 		void DrawAll(Graphics g)
 		{
+			RectangleF r = this.ClientRectangle;
+			GraphicsContainer gc = g.BeginContainer();
+			g.SmoothingMode = SmoothingMode.HighQuality;
+			g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+			g.SetClip(r);
+
+			g.Clear(this.BackColor);
+
+			g.EndContainer(gc);
 		}
 	}
 }

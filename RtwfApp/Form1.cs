@@ -14,17 +14,19 @@ namespace RtwfApp
 	{
 		int prevFrames;
 		TestData data;
+		Stopwatch sw;
 
 		public Form1()
 		{
 			InitializeComponent();
 			data = new TestData(60000, 50);
 			movingGraphControl1.Data = data;
+			sw = Stopwatch.StartNew();
 		}
 
 		private void timer1_Tick(object sender, EventArgs e)
 		{
-			movingGraphControl1.Shift(Stopwatch.GetTimestamp());
+			movingGraphControl1.Shift(sw.ElapsedTicks);
 		}
 
 		private void timer2_Tick(object sender, EventArgs e)

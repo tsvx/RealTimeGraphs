@@ -15,6 +15,7 @@ namespace RtwfApp
 		const int N = 60000; // point in the data
 		const int M = 50;	  // graphics on the plot
 		double[] data;
+		int prevFrames;
 
 		void InitData()
 		{
@@ -41,6 +42,14 @@ namespace RtwfApp
 		private void timer1_Tick(object sender, EventArgs e)
 		{
 			movingGraphControl1.Shift(Stopwatch.GetTimestamp());
+		}
+
+		private void timer2_Tick(object sender, EventArgs e)
+		{
+			int frames = movingGraphControl1.FramesNum;
+			int df = frames - prevFrames;
+			this.Text = String.Format("[{0} fps]", df);
+			prevFrames = frames;
 		}
 	}
 }

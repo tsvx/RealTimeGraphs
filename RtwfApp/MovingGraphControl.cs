@@ -14,9 +14,11 @@ namespace RtwfApp
 		long prevTime, curTime; // 100ns-ticks
 		const double timeScale = 500 * 25400 / 96.0; // ticks-per-pixel, = 500 ms/cm
 
+		public int FramesNum { get; private set; }
+
 		public MovingGraphControl()
 		{
-			prevTime = -1;
+			prevTime = curTime = -1;
 			InitializeComponent();
 			this.SetStyle(
 				ControlStyles.OptimizedDoubleBuffer |
@@ -41,6 +43,7 @@ namespace RtwfApp
 		{
 			DrawAll(pe.Graphics);
 			prevTime = curTime;
+			FramesNum++;
 		}
 
 		void DrawAll(Graphics g)

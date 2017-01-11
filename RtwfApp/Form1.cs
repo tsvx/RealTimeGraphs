@@ -19,7 +19,7 @@ namespace RtwfApp
 		public Form1()
 		{
 			InitializeComponent();
-			data = new TestData(60000, 50);
+			data = new TestData(60000, 50, TimeSpan.FromMilliseconds(1));
 			movingGraphControl1.Data = data;
 			sw = Stopwatch.StartNew();
 		}

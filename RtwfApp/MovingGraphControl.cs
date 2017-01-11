@@ -12,8 +12,15 @@ namespace RtwfApp
 {
 	public partial class MovingGraphControl : Control
 	{
-		long prevTime, curTime; // 100ns ticks
-		const double timeScale = 500 * 25400 / 96.0; // ticks-per-pixel, = 500 ms/cm
+		/// <summary>
+		/// 100ns ticks
+		/// </summary>
+		long prevTime, curTime;
+
+		/// <summary>
+		/// ticks-per-pixel, = 500 ms/cm
+		/// </summary>
+		const double timeScale = 500 * 25400 / 96.0;
 
 		public int FramesNum { get; private set; }
 
@@ -25,7 +32,7 @@ namespace RtwfApp
 			InitializeComponent();
 			this.SetStyle(
 				ControlStyles.OptimizedDoubleBuffer |
-				ControlStyles.Opaque |
+				//ControlStyles.Opaque |
 				ControlStyles.ResizeRedraw |
 				ControlStyles.AllPaintingInWmPaint |
 				ControlStyles.UserPaint,
@@ -57,7 +64,27 @@ namespace RtwfApp
 			g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
 			g.SetClip(r);
 
-			g.Clear(this.BackColor);
+			//g.Clear(this.BackColor);
+
+			long leftTime = (long)(curTime - r.Width * timeScale);
+			// Draw from leftTime to curTime;
+			// 
+
+			for (int j = 0; j < Data.NumGraphs; j++)
+			{
+				float px = 0, py = 0;
+				bool first = true;
+				foreach (var p in Data.GetInterval(j, leftTime, curTime))
+				{
+					float x = r.Left + (float)((p.Key - leftTime) / timeScale);
+					float y = (float)(r.Bottom - p.Value * r.Height);
+					if (!first)
+						g.DrawLine(SystemPens.WindowText, px, py, x, y);
+					else
+						first = false;
+					px = x; py = y;
+				}
+			}
 
 			g.EndContainer(gc);
 		}

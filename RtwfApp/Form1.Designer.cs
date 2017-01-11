@@ -29,10 +29,22 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			this.movingGraphControl1 = new RtwfApp.MovingGraphControl();
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
 			this.timer2 = new System.Windows.Forms.Timer(this.components);
+			this.movingGraphControl1 = new RtwfApp.MovingGraphControl();
 			this.SuspendLayout();
+			// 
+			// timer1
+			// 
+			this.timer1.Enabled = true;
+			this.timer1.Interval = 15;
+			this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+			// 
+			// timer2
+			// 
+			this.timer2.Enabled = true;
+			this.timer2.Interval = 1000;
+			this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
 			// 
 			// movingGraphControl1
 			// 
@@ -43,18 +55,6 @@
 			this.movingGraphControl1.Size = new System.Drawing.Size(945, 449);
 			this.movingGraphControl1.TabIndex = 0;
 			this.movingGraphControl1.Text = "movingGraphControl1";
-			// 
-			// timer1
-			// 
-			this.timer1.Enabled = true;
-			this.timer1.Interval = 10;
-			this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-			// 
-			// timer2
-			// 
-			this.timer2.Enabled = true;
-			this.timer2.Interval = 1000;
-			this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
 			// 
 			// Form1
 			// 

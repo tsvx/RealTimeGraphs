@@ -8,6 +8,7 @@ namespace RtwfApp
 	public class TestData : IData
 	{
 		int numPoints, numGraphs;
+		long ticks2point;
 		const int N = 60000; // point in the data
 		const int M = 50;	  // graphics on the plot
 		double[] data;
@@ -15,10 +16,17 @@ namespace RtwfApp
 		public int NumPoints { get { return numPoints; } }
 		public int NumGraphs { get { return numGraphs; } }
 
-		public TestData(int points, int graphs)
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="points">The number of points in each graph</param>
+		/// <param name="graphs">The number of graphs</param>
+		/// <param name="period">The period between points</param>
+		public TestData(int points, int graphs, TimeSpan period)
 		{
 			numPoints = points;
 			numGraphs = graphs;
+			ticks2point = period.Ticks;
 			InitData();
 		}
 
@@ -39,6 +47,14 @@ namespace RtwfApp
 				data[i] = (data[i] - min) / (max - min);
 		}
 
-		public double this[int point, int graph] { get { return data[(point + graph * numPoints / numGraphs) % numPoints]; } }
+		public IEnumerable<KeyValuePair<long, double>> GetInterval(int graph, long beginTicks, long endTicks)
+		{
+			long ticks = beginTicks - beginTicks % ticks2point;
+			int graphShift = graph * numPoints / numGraphs;
+			int point = (int)(beginTicks / ticks2point - graphShift) % numPoints;
+
+			for (; ticks <= endTicks; ticks += ticks2point, point++)
+				yield return new KeyValuePair<long, double>(ticks, data[point % numPoints]);
+		}
 	}
 }

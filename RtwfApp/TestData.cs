@@ -47,14 +47,23 @@ namespace RtwfApp
 				data[i] = (data[i] - min) / (max - min);
 		}
 
+		static dynamic Mod(dynamic a, dynamic b)
+		{
+			if (b < 0) b = -b;
+			a = a % b;
+			if (a < 0) a += b;
+			return a;
+		}
+		//static long Mod(long a, long b) { if (b < 0) b = -b; a = a % b; return a < 0 ? a + b : b; }
+		
 		public IEnumerable<KeyValuePair<long, double>> GetInterval(int graph, long beginTicks, long endTicks)
 		{
-			long ticks = beginTicks - beginTicks % ticks2point;
+			long ticks = beginTicks - Mod(beginTicks, ticks2point);
 			int graphShift = graph * numPoints / numGraphs;
-			int point = (int)(beginTicks / ticks2point - graphShift) % numPoints;
+			int point = (int)Mod(beginTicks / ticks2point - graphShift, numPoints);
 
 			for (; ticks <= endTicks; ticks += ticks2point, point++)
-				yield return new KeyValuePair<long, double>(ticks, data[point % numPoints]);
+				yield return new KeyValuePair<long, double>(ticks, data[Mod(point, numPoints)]);
 		}
 	}
 }

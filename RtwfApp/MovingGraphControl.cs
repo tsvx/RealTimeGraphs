@@ -51,26 +51,32 @@ namespace RtwfApp
 
 		protected override void OnPaint(PaintEventArgs pe)
 		{
-			//pe.Graphics.Clear(this.BackColor);
-			DrawAll(pe.Graphics);
+			var g = pe.Graphics;
+
+			var gc = Preamble(g);
+			DrawAll(g);
+			g.EndContainer(gc);
+
 			prevTime = curTime;
 			FramesNum++;
 		}
 
-		//RectangleF Preamble(Graphics g)
-		//{
-		//}
-
-		void DrawAll(Graphics g)
+		GraphicsContainer Preamble(Graphics g)
 		{
 			RectangleF r = this.ClientRectangle;
-			GraphicsContainer gc = g.BeginContainer();
+			var gc = g.BeginContainer();
 			g.SmoothingMode = SmoothingMode.HighQuality;
 			g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
 			g.SetClip(r);
 
 			//g.Clear(this.BackColor);
 
+			return gc;
+		}
+
+		void DrawAll(Graphics g)
+		{
+			RectangleF r = this.ClientRectangle;
 			long leftTime = (long)(curTime - r.Width * timeScale);
 			// Draw from leftTime to curTime;
 			// 
@@ -87,8 +93,6 @@ namespace RtwfApp
 				}
 				g.DrawLines(SystemPens.WindowText, points.ToArray());
 			}
-
-			g.EndContainer(gc);
 		}
 	}
 }

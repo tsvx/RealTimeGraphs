@@ -48,9 +48,10 @@
 			// 
 			// movingGraphControl1
 			// 
-			this.movingGraphControl1.BackColor = System.Drawing.Color.DarkGreen;
+			this.movingGraphControl1.BackColor = System.Drawing.Color.MintCream;
 			this.movingGraphControl1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.movingGraphControl1.Location = new System.Drawing.Point(0, 0);
+			this.movingGraphControl1.MinimumSize = new System.Drawing.Size(1, 1);
 			this.movingGraphControl1.Name = "movingGraphControl1";
 			this.movingGraphControl1.Size = new System.Drawing.Size(945, 449);
 			this.movingGraphControl1.TabIndex = 0;

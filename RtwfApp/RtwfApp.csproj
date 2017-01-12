@@ -59,6 +59,10 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RazorPainter.cs" />
+    <Compile Include="RazorPainterControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="TestData.cs" />
     <Compile Include="TimeValues.cs" />
     <EmbeddedResource Include="Form1.resx">

@@ -3,6 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RtwfApp", "RtwfApp\RtwfApp.csproj", "{85D4E55B-0ABE-4DF8-9DE0-292CDF2D09DA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RazorPaint", "RazorPaint", "{7A4BE014-06BB-45D4-9876-294A01803D0D}"
+	ProjectSection(SolutionItems) = preProject
+		RtwfApp\RazorPainter.cs = RtwfApp\RazorPainter.cs
+		RtwfApp\RazorPainterControl.cs = RtwfApp\RazorPainterControl.cs
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

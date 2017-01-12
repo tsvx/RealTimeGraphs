@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace RtwfApp
 {
-	public partial class MovingGraphControl : Control
+	public partial class MovingGraphControl : RazorGDIPainter.RazorPainterControl
 	{
 		/// <summary>
 		/// 100ns ticks
@@ -28,15 +28,8 @@ namespace RtwfApp
 
 		public MovingGraphControl()
 		{
-			prevTime = curTime = -1;
+			prevTime = curTime = long.MinValue;
 			InitializeComponent();
-			this.SetStyle(
-				ControlStyles.OptimizedDoubleBuffer |
-				//ControlStyles.Opaque |
-				ControlStyles.ResizeRedraw |
-				ControlStyles.AllPaintingInWmPaint |
-				ControlStyles.UserPaint,
-				true);
 		}
 
 		/// <summary>
@@ -49,13 +42,23 @@ namespace RtwfApp
 			Invalidate();
 		}
 
+		protected override void OnResize(EventArgs e)
+		{
+			base.OnResize(e);
+		}
+
 		protected override void OnPaint(PaintEventArgs pe)
 		{
-			var g = pe.Graphics;
+			base.OnPaint(pe);
+			var g = this.RazorGFX;
+				//pe.Graphics;
 
 			var gc = Preamble(g);
-			DrawAll(g);
+			if (curTime != long.MinValue)
+				DrawAll(g);
 			g.EndContainer(gc);
+
+			this.RazorPaint();
 
 			prevTime = curTime;
 			FramesNum++;
@@ -69,7 +72,7 @@ namespace RtwfApp
 			g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
 			g.SetClip(r);
 
-			//g.Clear(this.BackColor);
+			g.Clear(this.BackColor);
 
 			return gc;
 		}
@@ -91,7 +94,8 @@ namespace RtwfApp
 					float y = (float)(r.Bottom - p.Value * r.Height);
 					points.Add(new PointF(x, y));
 				}
-				g.DrawLines(SystemPens.WindowText, points.ToArray());
+				if (points.Count > 0)
+					g.DrawLines(SystemPens.WindowText, points.ToArray());
 			}
 		}
 	}

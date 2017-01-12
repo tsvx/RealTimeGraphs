@@ -45,20 +45,37 @@ namespace RtwfApp
 		protected override void OnResize(EventArgs e)
 		{
 			base.OnResize(e);
+			prevTime = long.MinValue;
+			Invalidate();
 		}
 
 		protected override void OnPaint(PaintEventArgs pe)
 		{
 			base.OnPaint(pe);
-			var g = this.RazorGFX;
-				//pe.Graphics;
 
-			var gc = Preamble(g);
-			if (curTime != long.MinValue)
-				DrawAll(g);
-			g.EndContainer(gc);
+			lock (this.RazorLock)
+			{
+				var g = this.RazorGFX;
 
-			this.RazorPaint();
+				var gc = Preamble(g);
+
+				if (Data != null && curTime != long.MinValue)
+				{
+					if (prevTime == long.MinValue)
+						DrawAll(g);
+					else
+					{
+						float dx = (float)((curTime - prevTime) / timeScale);
+						var bmp = RazorBMP.Clone();
+						RazorGFX.DrawImage(RazorBMP, -dx, 0);
+					}
+				}
+
+				g.EndContainer(gc);
+
+				this.RazorPaint();
+				prevTime = long.MinValue;
+			}
 
 			prevTime = curTime;
 			FramesNum++;
@@ -72,8 +89,6 @@ namespace RtwfApp
 			g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
 			g.SetClip(r);
 
-			g.Clear(this.BackColor);
-
 			return gc;
 		}
 
@@ -81,8 +96,8 @@ namespace RtwfApp
 		{
 			RectangleF r = this.ClientRectangle;
 			long leftTime = (long)(curTime - r.Width * timeScale);
-			// Draw from leftTime to curTime;
-			// 
+
+			g.Clear(this.BackColor);
 
 			var points = new List<PointF>();
 			for (int j = 0; j < Data.NumGraphs; j++)

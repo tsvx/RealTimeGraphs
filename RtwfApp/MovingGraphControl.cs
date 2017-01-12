@@ -51,10 +51,15 @@ namespace RtwfApp
 
 		protected override void OnPaint(PaintEventArgs pe)
 		{
+			//pe.Graphics.Clear(this.BackColor);
 			DrawAll(pe.Graphics);
 			prevTime = curTime;
 			FramesNum++;
 		}
+
+		//RectangleF Preamble(Graphics g)
+		//{
+		//}
 
 		void DrawAll(Graphics g)
 		{
@@ -70,20 +75,17 @@ namespace RtwfApp
 			// Draw from leftTime to curTime;
 			// 
 
+			var points = new List<PointF>();
 			for (int j = 0; j < Data.NumGraphs; j++)
 			{
-				float px = 0, py = 0;
-				bool first = true;
+				points.Clear();
 				foreach (var p in Data.GetInterval(j, leftTime, curTime))
 				{
 					float x = r.Left + (float)((p.Key - leftTime) / timeScale);
 					float y = (float)(r.Bottom - p.Value * r.Height);
-					if (!first)
-						g.DrawLine(SystemPens.WindowText, px, py, x, y);
-					else
-						first = false;
-					px = x; py = y;
+					points.Add(new PointF(x, y));
 				}
+				g.DrawLines(SystemPens.WindowText, points.ToArray());
 			}
 
 			g.EndContainer(gc);

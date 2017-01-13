@@ -10,28 +10,28 @@ using System.Windows.Forms;
 
 namespace RtwfApp
 {
-	public partial class Form1 : Form
+	public partial class MovingGraphForm : Form
 	{
 		int prevFrames;
 		TestData data;
 		Stopwatch sw;
 
-		public Form1()
+		public MovingGraphForm()
 		{
 			InitializeComponent();
 			data = new TestData(60000, 3, TimeSpan.FromMilliseconds(1));
-			movingGraphControl1.Data = data;
+			movingGraphControl.Data = data;
 			sw = Stopwatch.StartNew();
 		}
 
-		private void timer1_Tick(object sender, EventArgs e)
+		private void frameTimer_Tick(object sender, EventArgs e)
 		{
-			movingGraphControl1.Shift(sw.ElapsedTicks);
+			movingGraphControl.Shift(sw.ElapsedTicks);
 		}
 
-		private void timer2_Tick(object sender, EventArgs e)
+		private void secondTimer_Tick(object sender, EventArgs e)
 		{
-			int frames = movingGraphControl1.FramesNum;
+			int frames = movingGraphControl.FramesNum;
 			int df = frames - prevFrames;
 			this.Text = String.Format("[{0} fps]", df);
 			prevFrames = frames;

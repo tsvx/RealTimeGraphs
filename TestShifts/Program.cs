@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace RtwfApp
+namespace TestShifts
 {
 	static class Program
 	{
@@ -15,7 +15,7 @@ namespace RtwfApp
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new MovingGraphForm());
+			Application.Run(new ShiftForm());
 		}
 	}
 }

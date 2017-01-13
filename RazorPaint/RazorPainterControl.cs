@@ -45,8 +45,6 @@ namespace RazorGDIPainter
 		/// </summary>
 		public readonly object RazorLock = new object();
 
-		//Graphics gx;
-
 		public RazorPainterControl()
 		{
 			this.MinimumSize = new Size(1, 1);
@@ -63,7 +61,6 @@ namespace RazorGDIPainter
 			RP = new RazorPainter();
 			RazorBMP = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
 			RazorGFX = Graphics.FromImage(RazorBMP);
-			//gx = Graphics.FromHdc(hDCRef.Handle);
 		}
 
 		protected override void OnResize(EventArgs e)
@@ -74,8 +71,6 @@ namespace RazorGDIPainter
 				if (RazorBMP != null) RazorBMP.Dispose();
 				RazorBMP = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
 				RazorGFX = Graphics.FromImage(RazorBMP);
-				//if (gx != null) gx.Dispose();
-				//gx = Graphics.FromHdc(hDCRef.Handle);
 			}
 			base.OnResize(e);
 		}
@@ -86,7 +81,6 @@ namespace RazorGDIPainter
 		public void RazorPaint()
 		{
 			RP.Paint(hDCRef, RazorBMP);
-			//gx.DrawImageUnscaled(RazorBMP, this.ClientRectangle.Location);
 		}
 	}
 }

@@ -66,8 +66,8 @@ namespace RtwfApp
 					else
 					{
 						float dx = (float)((curTime - prevTime) / timeScale);
-						var bmp = RazorBMP.Clone();
-						RazorGFX.DrawImage(RazorBMP, -dx, 0);
+						//var bmp = RazorBMP.Clone();
+						//RazorGFX.DrawImage(RazorBMP, -dx, 0);
 					}
 				}
 

@@ -36,6 +36,7 @@
 			// 
 			// secondTimer
 			// 
+			this.secondTimer.Enabled = true;
 			this.secondTimer.Interval = 1000;
 			this.secondTimer.Tick += new System.EventHandler(this.secondTimer_Tick);
 			// 
@@ -52,6 +53,7 @@
 			// 
 			// shiftTimer
 			// 
+			this.shiftTimer.Enabled = true;
 			this.shiftTimer.Interval = 15;
 			this.shiftTimer.Tick += new System.EventHandler(this.shiftTimer_Tick);
 			// 

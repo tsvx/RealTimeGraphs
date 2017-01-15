@@ -18,7 +18,7 @@ namespace TestShifts
 			InitializeComponent();
 		}
 
-		public void Shift(int pixels)
+		public void Shift(long ticks)
 		{
 			Invalidate();
 		}

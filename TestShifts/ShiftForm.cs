@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -28,7 +29,7 @@ namespace TestShifts
 
 		private void shiftTimer_Tick(object sender, EventArgs e)
 		{
-			shiftedControl.Shift(1);
+			shiftedControl.Shift(Stopwatch.GetTimestamp());
 		}
 	}
 }

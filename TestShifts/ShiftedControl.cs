@@ -12,10 +12,12 @@ namespace TestShifts
 	public partial class ShiftedControl : RazorGDIPainter.RazorPainterControl
 	{
 		public int FramesCounter { get; private set; }
+		TestBitmap tbmp;
 		
 		public ShiftedControl()
 		{
 			InitializeComponent();
+			tbmp = new TestBitmap(BackColor, ForeColor);
 		}
 
 		public void Shift(long ticks)
@@ -26,7 +28,16 @@ namespace TestShifts
 		protected override void OnPaint(PaintEventArgs pe)
 		{
 			base.OnPaint(pe);
+			RazorGFX.DrawImageUnscaled(tbmp.Bitmap, this.ClientRectangle.Location);
+			this.RazorPaint();
 			FramesCounter++;
+		}
+
+		protected override void OnResize(EventArgs e)
+		{
+			base.OnResize(e);
+			if (Created)
+				tbmp.Resize(this.ClientSize.Width, this.ClientSize.Height);
 		}
 	}
 }

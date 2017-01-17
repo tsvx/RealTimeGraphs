@@ -33,7 +33,7 @@ namespace TestShifts
 			base.OnPaint(pe);
 			//RazorGFX.DrawImageUnscaled(tbmp.Bitmap, 0, 0);
 			if (curTicks != long.MinValue)
-			{	
+			{
 				RectangleF rDst = (RectangleF)this.ClientRectangle;
 				RectangleF rSrc = new RectangleF((curTicks / 50000f) % this.ClientSize.Width, 0, tbmp.Bitmap.Width / 2, tbmp.Bitmap.Height);
 				RazorGFX.DrawImage(tbmp.Bitmap, rDst, rSrc, GraphicsUnit.Pixel);

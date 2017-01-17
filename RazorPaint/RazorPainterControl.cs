@@ -49,13 +49,13 @@ namespace RazorGDIPainter
 		{
 			this.MinimumSize = new Size(1, 1);
 
-			SetStyle(ControlStyles.DoubleBuffer, false);
-			SetStyle(ControlStyles.OptimizedDoubleBuffer, false);
-			SetStyle(ControlStyles.UserPaint, true);
-			SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-			SetStyle(ControlStyles.Opaque, true);
+			this.SetStyle(ControlStyles.DoubleBuffer, false);
+			this.SetStyle(ControlStyles.OptimizedDoubleBuffer, false);
+			this.SetStyle(ControlStyles.UserPaint, true);
+			this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+			this.SetStyle(ControlStyles.Opaque, true);
 
-			hDCGraphics = CreateGraphics();
+			hDCGraphics = this.CreateGraphics();
 			hDCRef = new HandleRef(hDCGraphics, hDCGraphics.GetHdc());
 
 			RP = new RazorPainter();

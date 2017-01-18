@@ -50,7 +50,10 @@ namespace TestShifts
 				//PlaceBitmapUnscaled(RazorGFX, tbmp.Bitmap, 0);
 
 				// 4. 11.6%
-				PlaceBitmapUnsafe(RazorBMP, tbmp.Bitmap, x);
+				//PlaceBitmapUnsafe(RazorBMP, tbmp.Bitmap, x);
+
+				// 5. 10.0%
+				PlaceBitmapSetDIBitsToDevice(RazorGFX, tbmp.Bitmap, x);
 			}
 
 			this.RazorPaint();
@@ -106,5 +109,11 @@ namespace TestShifts
 			dst.UnlockBits(bdDst);
 			src.UnlockBits(bdSrc);
 		}
+
+		void PlaceBitmapSetDIBitsToDevice(Graphics dstGfx, Bitmap srcBmp, int x)
+		{
+			GdiProxy.SetDIBitsToDevice(dstGfx, this.ClientRectangle, srcBmp, x, 0);
+		}
+
 	}
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
@@ -35,25 +36,31 @@ namespace TestShifts
 			base.OnPaint(pe);
 			if (curTicks != long.MinValue)
 			{
+				// Note: tested on YODA. Mem speed is ~20GB/s, so
+				// 8MB*65 times ~ 0.5GB => / 20 = 2,5% read and 5% copy, should be.
+
 				// 0. 3.3% out of 25%
 				//PlaceBitmapDummy(RazorGFX, tbmp.Bitmap, 0);
 
 				// 1. 12 FPS out of 65 FPS.
-				//float x = (curTicks / 50000f) % this.ClientSize.Width;
-				//PlaceBitmapFloat(RazorGFX, tbmp.Bitmap, x);
+				//float fx = (curTicks / 50000f) % this.ClientSize.Width;
+				//PlaceBitmapFloat(RazorGFX, tbmp.Bitmap, fx);
 
 				// 2. 24%, 65 FPS.
 				int x = (int)((curTicks / 50000) % this.ClientSize.Width);
 				//PlaceBitmapInt(RazorGFX, tbmp.Bitmap, x);
 
-				// 3. 24%, 65 FPS.
+				// 3. 24%, 65 FPS, no shift, just to try.
 				//PlaceBitmapUnscaled(RazorGFX, tbmp.Bitmap, 0);
 
 				// 4. 11.6%
 				//PlaceBitmapUnsafe(RazorBMP, tbmp.Bitmap, x);
 
 				// 5. 10.0%
-				PlaceBitmapSetDIBitsToDevice(RazorGFX, tbmp.Bitmap, x);
+				//PlaceBitmapSetDIBitsToDevice(RazorGFX, tbmp.Bitmap, x);
+
+				// 6. 38 FPS, but can be cached (Bitmap.GetHBitmap and hDCs)
+				PlaceBitmapBitBlt(RazorGFX, tbmp.Bitmap, x);
 			}
 
 			this.RazorPaint();
@@ -113,6 +120,12 @@ namespace TestShifts
 		void PlaceBitmapSetDIBitsToDevice(Graphics dstGfx, Bitmap srcBmp, int x)
 		{
 			GdiProxy.SetDIBitsToDevice(dstGfx, this.ClientRectangle, srcBmp, x, 0);
+		}
+
+		void PlaceBitmapBitBlt(Graphics dstGfx, Bitmap srcBmp, int x)
+		{
+			bool rslt = GdiProxy.BitBlt(dstGfx, this.ClientRectangle, srcBmp, new Point(x, 0), GdiProxy.TernaryRasterOperations.SRCCOPY);
+			Debug.Assert(rslt);
 		}
 
 	}

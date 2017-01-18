@@ -36,30 +36,46 @@ namespace TestShifts
 			base.OnPaint(pe);
 			if (curTicks != long.MinValue)
 			{
-				// Note: tested on YODA. Mem speed is ~20GB/s, so
+				// Tested on:
+				// YODA. 1920x1018 AMD HD 6570, W7x64 i5-3470 4@3.2GHz, Mem speed is ~20GB/s, so
 				// 8MB*65 times ~ 0.5GB => / 20 = 2,5% read and 5% copy, should be.
+				// SEASHELL. 1366x705, W10x64 i5-3317U 2x2@1.7-2.4GHz, Mem speed ~15GB/s, so
+				// 4MB*65 ~ 0.25GB => /15 = 1.7% read and 3.3% copy.
 
-				// 0. 3.3% out of 25%
+				// 0. Nop.
+				// YODA: 3.3% out of 25%, 65 FPS (max)
+				// SEASHELL: 4.3% out of 25%, 64 FPS (max)
 				//PlaceBitmapDummy(RazorGFX, tbmp.Bitmap, 0);
 
-				// 1. 12 FPS out of 65 FPS.
+				// 1. float DrawImage
+				// YODA: 12 FPS, 25%
+				// SEASHELL: 64 FPS, 18%
 				//float fx = (curTicks / 50000f) % this.ClientSize.Width;
 				//PlaceBitmapFloat(RazorGFX, tbmp.Bitmap, fx);
 
-				// 2. 24%, 65 FPS.
+				// 2. int DrawImage
+				// YODA: 24%, 65 FPS.
+				// SEASHELL: 18%, 64 FPS
 				int x = (int)((curTicks / 50000) % this.ClientSize.Width);
 				//PlaceBitmapInt(RazorGFX, tbmp.Bitmap, x);
 
-				// 3. 24%, 65 FPS, no shift, just to try.
+				// 3. DrawImageUnscaled
+				// YODA: 24%, 65 FPS, no shift, just to try.
 				//PlaceBitmapUnscaled(RazorGFX, tbmp.Bitmap, 0);
 
-				// 4. 11.6%
+				// 4. unsafe copy int*w*h + 2*(Lock+Unlock)Bits
+				// YODA: 11.6%
+				// SEASHELL: 13-14%
 				//PlaceBitmapUnsafe(RazorBMP, tbmp.Bitmap, x);
 
-				// 5. 10.0%
+				// 5. SetDIBitsToDevice + (Lock/Unlock)Bits + (Get/Release)Hdc
+				// YODA: 10.0%
+				// SeaShell: 11%
 				//PlaceBitmapSetDIBitsToDevice(RazorGFX, tbmp.Bitmap, x);
 
-				// 6. 38 FPS, but can be cached (Bitmap.GetHBitmap and hDCs)
+				// 6. BitBlt + 2*(Get/Release)Hdc + GetHBitmap/DeleteObject + 2*SelectObject
+				// YODA: 38 FPS, but can be cached (Bitmap.GetHBitmap and hDCs)
+				// SeaShell: 50 FPS, 25%
 				PlaceBitmapBitBlt(RazorGFX, tbmp.Bitmap, x);
 			}
 

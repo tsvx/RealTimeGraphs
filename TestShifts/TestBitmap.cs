@@ -14,7 +14,7 @@ namespace TestShifts
 
 	public class TestBitmap : IDisposable
 	{
-		public Image Bitmap;
+		public Bitmap Bitmap;
 		Color cBack, cGraph;
 		Pen pen;
 		PointF[] points;
@@ -34,11 +34,11 @@ namespace TestShifts
 			pen = new Pen(cGraph, 2);
 		}
 
-		void DrawSinus(Graphics g, Rectangle r, SinusData s)
+		void DrawSinus(Graphics g, int width, Rectangle r, SinusData s)
 		{
 			for (int i = 0; i < r.Width; i++)
 			{
-				double x = (float)i / r.Width * 2 * Math.PI + s.Phase;
+				double x = (float)i / width * 2 * Math.PI + s.Phase;
 				x *= s.Periods;
 				double y = Math.Sin(x) * s.Amplitude + s.Mean;
 				double j = r.Top + (1 - y) / 2 * r.Height;
@@ -50,15 +50,14 @@ namespace TestShifts
 		public void Resize(int width, int height)
 		{
 			Bitmap = new Bitmap(width * 2, height);
-			points = new PointF[width];
+			points = new PointF[2 * width];
 			using (var g = Graphics.FromImage(Bitmap))
 			{
 				g.Clear(cBack);
 				g.SmoothingMode = SmoothingMode.HighQuality;
-				var r = new Rectangle(0, 0, width, height);
+				var r = new Rectangle(0, 0, 2 * width, height);
 				foreach (var sinus in graphs)
-					DrawSinus(g, r, sinus);
-				g.DrawImageUnscaled(Bitmap, width, 0);
+					DrawSinus(g, width, r, sinus);
 			}
 		}
 

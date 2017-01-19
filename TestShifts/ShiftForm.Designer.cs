@@ -65,6 +65,7 @@
 			this.Controls.Add(this.shiftedControl);
 			this.Name = "ShiftForm";
 			this.Text = "Form1";
+			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
 			this.ResumeLayout(false);
 
 		}

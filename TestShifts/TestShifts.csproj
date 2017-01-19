@@ -54,6 +54,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GdiProxy.cs" />
+    <Compile Include="GdiShift1.cs" />
     <Compile Include="ShiftForm.cs">
       <SubType>Form</SubType>
     </Compile>

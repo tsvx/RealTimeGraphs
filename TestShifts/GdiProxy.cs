@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security;
 using System.Text;
 
 namespace TestShifts
@@ -111,5 +112,8 @@ namespace TestShifts
 				return rslt;
 			}
 		}
+
+		[DllImport("msvcrt.dll", EntryPoint = "memcpy", CallingConvention = CallingConvention.Cdecl, SetLastError = false), SuppressUnmanagedCodeSecurity]
+		public static unsafe extern void* CopyMemory(void* dest, void* src, ulong count);
 	}
 }

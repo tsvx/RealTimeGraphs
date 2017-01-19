@@ -68,6 +68,11 @@ namespace TestShifts
 				// SEASHELL: 13-14%
 				//PlaceBitmapUnsafe(RazorBMP, tbmp.Bitmap, x);
 
+				// 4'. unsafe memcpy copy (int*w)*h + 2*(Lock+Unlock)Bits
+				// YODA: 6.2%
+				// SEASHELL: 
+				PlaceBitmapUnsafe2(RazorBMP, tbmp.Bitmap, x);
+
 				// 5. SetDIBitsToDevice + (Lock/Unlock)Bits + (Get/Release)Hdc
 				// YODA: 10.0%
 				// SeaShell: 11%
@@ -76,7 +81,7 @@ namespace TestShifts
 				// 6. BitBlt + 2*(Get/Release)Hdc + GetHBitmap/DeleteObject + 2*SelectObject
 				// YODA: 38 FPS, but can be cached (Bitmap.GetHBitmap and hDCs)
 				// SeaShell: 50 FPS, 25%
-				PlaceBitmapBitBlt(RazorGFX, tbmp.Bitmap, x);
+				//PlaceBitmapBitBlt(RazorGFX, tbmp.Bitmap, x);
 			}
 
 			this.RazorPaint();
@@ -121,14 +126,35 @@ namespace TestShifts
 			var bdDst = dst.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
 
 			int* ps = (int*)bdSrc.Scan0, pd = (int*)bdDst.Scan0;
+			int dstAdd = bdDst.Stride / 4 - w, srcAdd = bdSrc.Stride / 4 - w;
 			for (int i = 0; i < h; i++)
 			{
 				for (int j = 0; j < w; j++)
 					*pd++ = *ps++;
-				pd += bdDst.Stride / 4 - w;
-				ps += bdSrc.Stride / 4 - w;
+				pd += dstAdd;
+				ps += srcAdd;
 			}
 			
+			dst.UnlockBits(bdDst);
+			src.UnlockBits(bdSrc);
+		}
+
+		static unsafe void PlaceBitmapUnsafe2(Bitmap dst, Bitmap src, int x)
+		{
+			int w = dst.Width, h = dst.Height;
+
+			var bdSrc = src.LockBits(new Rectangle(x, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+			var bdDst = dst.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+
+			byte* ps = (byte*)bdSrc.Scan0, pd = (byte*)bdDst.Scan0;
+			int dstAdd = bdDst.Stride, srcAdd = bdSrc.Stride;
+			for (int i = 0; i < h; i++)
+			{
+				GdiProxy.CopyMemory(pd, ps, (ulong)(w << 2));
+				pd += dstAdd;
+				ps += srcAdd;
+			}
+
 			dst.UnlockBits(bdDst);
 			src.UnlockBits(bdSrc);
 		}

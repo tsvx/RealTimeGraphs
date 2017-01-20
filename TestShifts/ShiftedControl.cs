@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NIIT.Utils;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,20 +16,28 @@ namespace TestShifts
 	public partial class ShiftedControl : RazorGDIPainter.RazorPainterControl
 	{
 		public int FramesCounter { get; private set; }
+		public StatsAccum Stats;
+		public BiStatsAccum BiStats;
+
 		TestBitmap tbmp;
-		long curTicks;
+		long curTicks, n;
 		
 		public ShiftedControl()
 		{
+			Stats = new StatsAccum();
+			BiStats = new BiStatsAccum(15, true);
 			InitializeComponent();
 			tbmp = new TestBitmap(BackColor, ForeColor);
 			curTicks = long.MinValue;
+			n = 0;
 		}
 
 		public void Shift(long ticks)
 		{
+			n++;
 			curTicks = ticks;
 			Invalidate();
+			FramesCounter++;
 		}
 
 		protected override void OnPaint(PaintEventArgs pe)
@@ -36,6 +45,11 @@ namespace TestShifts
 			base.OnPaint(pe);
 			if (curTicks != long.MinValue)
 			{
+				//long realTicks = Stopwatch.GetTimestamp(), dt = realTicks - curTicks;
+				//Stats.Add(dt / 1e4);
+				BiStats.Add(n, curTicks / 1e4);
+				//curTicks = realTicks;
+
 				// Tested on:
 				// YODA. 1920x1018 AMD HD 6570, W7x64 i5-3470 4@3.2GHz, Mem speed is ~20GB/s, so
 				// 8MB*65 times ~ 0.5GB => / 20 = 2,5% read and 5% copy, should be.
@@ -70,7 +84,7 @@ namespace TestShifts
 
 				// 4'. unsafe memcpy copy (int*w)*h + 2*(Lock+Unlock)Bits
 				// YODA: 6.2%
-				// SEASHELL: 
+				// SEASHELL: 6.8%
 				PlaceBitmapUnsafe2(RazorBMP, tbmp.Bitmap, x);
 
 				// 5. SetDIBitsToDevice + (Lock/Unlock)Bits + (Get/Release)Hdc
@@ -85,7 +99,7 @@ namespace TestShifts
 			}
 
 			this.RazorPaint();
-			FramesCounter++;
+			//FramesCounter++;
 		}
 
 		protected override void OnResize(EventArgs e)

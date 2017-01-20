@@ -13,23 +13,25 @@ namespace TestShifts
 	public partial class ShiftForm : Form
 	{
 		int prevFrames;
+		long startTicks;
 
 		public ShiftForm()
 		{
 			InitializeComponent();
+			startTicks = Stopwatch.GetTimestamp();
 		}
 
 		private void secondTimer_Tick(object sender, EventArgs e)
 		{
 			int frames = shiftedControl.FramesCounter;
 			int df = frames - prevFrames;
-			this.Text = String.Format("[{0} fps]", df);
+			this.Text = String.Format("{0} [{1} fps] {2}", this.Name, df, shiftedControl.BiStats.ToShortString());
 			prevFrames = frames;
 		}
 
 		private void shiftTimer_Tick(object sender, EventArgs e)
 		{
-			shiftedControl.Shift(Stopwatch.GetTimestamp());
+			shiftedControl.Shift(Stopwatch.GetTimestamp() - startTicks);
 		}
 	}
 }

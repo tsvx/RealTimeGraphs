@@ -47,7 +47,8 @@ namespace TestShifts
 			{
 				//long realTicks = Stopwatch.GetTimestamp(), dt = realTicks - curTicks;
 				//Stats.Add(dt / 1e4);
-				BiStats.Add(n, curTicks / 1e4);
+				//BiStats.Add(n, curTicks * 1e3 / Stopwatch.Frequency);
+				Stats.Add(n * 15.6 - curTicks * 1e3 / Stopwatch.Frequency);
 				//curTicks = realTicks;
 
 				// Tested on:

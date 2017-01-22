@@ -37,7 +37,6 @@ namespace TestShifts
 			n++;
 			curTicks = ticks;
 			Invalidate();
-			FramesCounter++;
 		}
 
 		protected override void OnPaint(PaintEventArgs pe)
@@ -47,8 +46,8 @@ namespace TestShifts
 			{
 				//long realTicks = Stopwatch.GetTimestamp(), dt = realTicks - curTicks;
 				//Stats.Add(dt / 1e4);
-				//BiStats.Add(n, curTicks * 1e3 / Stopwatch.Frequency);
-				Stats.Add(n * 15.6 - curTicks * 1e3 / Stopwatch.Frequency);
+				BiStats.Add(n, curTicks * 1e3 / Stopwatch.Frequency);
+				Stats.Add(n * 15.625 - curTicks * 1e3 / Stopwatch.Frequency);
 				//curTicks = realTicks;
 
 				// Tested on:
@@ -71,7 +70,7 @@ namespace TestShifts
 				// 2. int DrawImage
 				// YODA: 24%, 65 FPS.
 				// SEASHELL: 18%, 64 FPS
-				int x = (int)((curTicks / 50000) % this.ClientSize.Width);
+				int x = (int)((curTicks / 5000) % this.ClientSize.Width);
 				//PlaceBitmapInt(RazorGFX, tbmp.Bitmap, x);
 
 				// 3. DrawImageUnscaled
@@ -100,7 +99,7 @@ namespace TestShifts
 			}
 
 			this.RazorPaint();
-			//FramesCounter++;
+			FramesCounter++;
 		}
 
 		protected override void OnResize(EventArgs e)

@@ -23,38 +23,47 @@ namespace TestShifts
 		long curTicks, n;
 		double msInTimerTick;
 
-		//MultimediaTimer.AccurateTimer timer;
+		MultimediaTimer.AccurateTimer timer;
+		//System.Threading.Timer timer;
 		
 		public ShiftedControl()
 		{
 			Stats = new StatsAccum();
 			BiStats = new BiStatsAccum(15, true);
 			InitializeComponent();
-			tbmp = new TestBitmap(BackColor, ForeColor);
 			curTicks = long.MinValue;
 			n = 0;
 			int min, max, cur;
 			MultimediaTimer.AccurateTimer.QueryTimerResolution(out min, out max, out cur);
 			msInTimerTick = min / 1e4;
+			//timer = new System.Threading.Timer(TimerTick);
 		}
+
+		// OnPaint, WM_TIMER:	s = 2.4 ms
+		// Threading timer:		s = 4.3 ms
+		// MM Timer:			s = 0.25 s
 
 		public void Start()
 		{
-			//timer = new MultimediaTimer.AccurateTimer(TimerTick, 15);
+			tbmp = new TestBitmap(this.BackColor, this.ForeColor);
+			tbmp.Resize(this.ClientSize.Width, this.ClientSize.Height);
+			timer = new MultimediaTimer.AccurateTimer(TimerTick, 25);
+			//timer.Change(10, 15);
 		}
 
-		//void TimerTick()
-		//{
-		//	Shift(Stopwatch.GetTimestamp());
-		//}
+		void TimerTick()
+		//void TimerTick(object state)
+		{
+			Shift(Stopwatch.GetTimestamp());
+		}
 
 		public void Shift(long ticks)
 		{
 			n++;
 			curTicks = ticks;
-			//lock (this.RazorLock)
-			//	Render();
-			Invalidate();
+			lock (this.RazorLock)
+				Render(null);
+			//Invalidate();
 		}
 
 		protected override void OnPaint(PaintEventArgs pe)
@@ -68,9 +77,9 @@ namespace TestShifts
 		{
 			if (curTicks != long.MinValue)
 			{
-				long realTicks = Stopwatch.GetTimestamp(), dt = realTicks - curTicks;
-				Stats.Add(dt * 1e3 / Stopwatch.Frequency);
-				//BiStats.Add(n, curTicks * 1e3 / Stopwatch.Frequency);
+				//long realTicks = Stopwatch.GetTimestamp(), dt = realTicks - curTicks;
+				//Stats.Add(dt * 1e3 / Stopwatch.Frequency);
+				BiStats.Add(n, curTicks * 1e3 / Stopwatch.Frequency);
 				//Stats.Add(n * msInTimerTick - curTicks * 1e3 / Stopwatch.Frequency);
 				//curTicks = realTicks;
 
@@ -94,7 +103,7 @@ namespace TestShifts
 				// 2. int DrawImage
 				// YODA: 24%, 65 FPS.
 				// SEASHELL: 18%, 64 FPS
-				int x = (int)((curTicks / 5000) % this.ClientSize.Width);
+				int x = (int)((curTicks / 50000) % this.ClientSize.Width);
 		
 				//PlaceBitmapInt(RazorGFX, tbmp.Bitmap, x);
 
@@ -110,13 +119,13 @@ namespace TestShifts
 				// 4'. unsafe memcpy (int*w)*h + 2*(Lock+Unlock)Bits
 				// YODA: 6.2%
 				// SEASHELL: 6.8%
-				//PlaceBitmapUnsafe2(RazorBMP, tbmp.Bitmap, x);
+				PlaceBitmapUnsafe2(RazorBMP, tbmp.Bitmap, x);
 
 				// 5. SetDIBitsToDevice + (Lock/Unlock)Bits + (Get/Release)Hdc
 				// YODA: 10.0%
 				// SeaShell: 11%
 				//PlaceBitmapSetDIBitsToDevice(RazorGFX, tbmp.Bitmap, x);
-				PlaceBitmapSetDIBitsToDevice(g, tbmp.Bitmap, x);
+				//PlaceBitmapSetDIBitsToDevice(g, tbmp.Bitmap, x);
 
 				// 6. BitBlt + 2*(Get/Release)Hdc + GetHBitmap/DeleteObject + 2*SelectObject
 				// YODA: 38 FPS, but can be cached (Bitmap.GetHBitmap and hDCs)
@@ -124,14 +133,14 @@ namespace TestShifts
 				//PlaceBitmapBitBlt(RazorGFX, tbmp.Bitmap, x);
 			}
 
-			//this.RazorPaint();
+			this.RazorPaint();
 			FramesCounter++;
 		}
 
 		protected override void OnResize(EventArgs e)
 		{
 			base.OnResize(e);
-			if (Created)
+			if (Created && tbmp != null)
 				tbmp.Resize(this.ClientSize.Width, this.ClientSize.Height);
 		}
 

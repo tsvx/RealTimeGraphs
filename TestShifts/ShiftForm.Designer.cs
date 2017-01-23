@@ -30,8 +30,8 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			this.secondTimer = new System.Windows.Forms.Timer(this.components);
-			this.shiftedControl = new TestShifts.ShiftedControl();
 			this.shiftTimer = new System.Windows.Forms.Timer(this.components);
+			this.shiftedControl = new TestShifts.ShiftedControl();
 			this.SuspendLayout();
 			// 
 			// secondTimer
@@ -40,22 +40,23 @@
 			this.secondTimer.Interval = 1000;
 			this.secondTimer.Tick += new System.EventHandler(this.secondTimer_Tick);
 			// 
+			// shiftTimer
+			// 
+			this.shiftTimer.Enabled = true;
+			this.shiftTimer.Interval = 15;
+			this.shiftTimer.Tick += new System.EventHandler(this.shiftTimer_Tick);
+			// 
 			// shiftedControl
 			// 
-			this.shiftedControl.BackColor = System.Drawing.Color.GhostWhite;
+			this.shiftedControl.BackColor = System.Drawing.Color.Black;
 			this.shiftedControl.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.shiftedControl.ForeColor = System.Drawing.Color.LawnGreen;
 			this.shiftedControl.Location = new System.Drawing.Point(0, 0);
 			this.shiftedControl.MinimumSize = new System.Drawing.Size(1, 1);
 			this.shiftedControl.Name = "shiftedControl";
 			this.shiftedControl.Size = new System.Drawing.Size(972, 518);
 			this.shiftedControl.TabIndex = 0;
 			this.shiftedControl.Text = "shiftedControl";
-			// 
-			// shiftTimer
-			// 
-			this.shiftTimer.Enabled = true;
-			this.shiftTimer.Interval = 15;
-			this.shiftTimer.Tick += new System.EventHandler(this.shiftTimer_Tick);
 			// 
 			// ShiftForm
 			// 

@@ -17,11 +17,11 @@
 			{
 				components.Dispose();
 			}
-			//if (timer != null)
-			//{
-			//	timer.Stop();
-			//	timer = null;
-			//}
+			if (timer != null)
+			{
+				timer.Dispose();
+				timer = null;
+			}
 			base.Dispose(disposing);
 		}
 

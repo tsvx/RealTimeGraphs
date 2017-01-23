@@ -21,6 +21,7 @@ namespace TestShifts
 
 		TestBitmap tbmp;
 		long curTicks, n;
+		double msInTimerTick;
 		
 		public ShiftedControl()
 		{
@@ -30,6 +31,9 @@ namespace TestShifts
 			tbmp = new TestBitmap(BackColor, ForeColor);
 			curTicks = long.MinValue;
 			n = 0;
+			int min, max, cur;
+			MultimediaTimer.AccurateTimer.QueryTimerResolution(out min, out max, out cur);
+			msInTimerTick = min / 1e4;
 		}
 
 		public void Shift(long ticks)
@@ -46,8 +50,8 @@ namespace TestShifts
 			{
 				//long realTicks = Stopwatch.GetTimestamp(), dt = realTicks - curTicks;
 				//Stats.Add(dt / 1e4);
-				BiStats.Add(n, curTicks * 1e3 / Stopwatch.Frequency);
-				Stats.Add(n * 15.625 - curTicks * 1e3 / Stopwatch.Frequency);
+				//BiStats.Add(n, curTicks * 1e3 / Stopwatch.Frequency);
+				Stats.Add(n * msInTimerTick - curTicks * 1e3 / Stopwatch.Frequency);
 				//curTicks = realTicks;
 
 				// Tested on:

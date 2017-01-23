@@ -97,6 +97,10 @@
       <Project>{87b50c9b-3a41-41a4-bf29-52c3d823d875}</Project>
       <Name>MathStat</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MultimediaTimer\MultimediaTimer.csproj">
+      <Project>{de2611c9-8415-44de-acef-700f920d1bbc}</Project>
+      <Name>MultimediaTimer</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

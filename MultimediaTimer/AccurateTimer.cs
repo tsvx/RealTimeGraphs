@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace MultimediaTimer
 {
-    class AccurateTimer
+    public class AccurateTimer
     {
         private delegate void TimerEventDel(int id, int msg, IntPtr user, int dw1, int dw2);
         private const int TIME_PERIODIC = 1;

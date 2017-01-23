@@ -31,7 +31,13 @@ namespace TestShifts
 
 		private void shiftTimer_Tick(object sender, EventArgs e)
 		{
-			shiftedControl.Shift(Stopwatch.GetTimestamp() - startTicks);
+			//shiftedControl.Shift(Stopwatch.GetTimestamp() - startTicks);
+		}
+
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
+			shiftedControl.Start();
 		}
 	}
 }

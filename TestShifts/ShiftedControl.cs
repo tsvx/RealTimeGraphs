@@ -22,6 +22,8 @@ namespace TestShifts
 		TestBitmap tbmp;
 		long curTicks, n;
 		double msInTimerTick;
+
+		System.Threading.Timer timer;
 		
 		public ShiftedControl()
 		{
@@ -34,32 +36,45 @@ namespace TestShifts
 			int min, max, cur;
 			MultimediaTimer.AccurateTimer.QueryTimerResolution(out min, out max, out cur);
 			msInTimerTick = min / 1e4;
+
+			timer = new System.Threading.Timer(TimerTick);
+
+		}
+
+		public void Start()
+		{
+			timer.Change(10, 15);
+		}
+
+		void TimerTick(object state)
+		{
+			Shift(Stopwatch.GetTimestamp());
 		}
 
 		public void Shift(long ticks)
 		{
 			n++;
 			curTicks = ticks;
-			//lock (this.RazorLock)
-			//	Render();
-			Invalidate();
-		}
-
-		protected override void OnPaint(PaintEventArgs pe)
-		{
-			base.OnPaint(pe);
 			lock (this.RazorLock)
 				Render();
+			//Invalidate();
 		}
+
+		//protected override void OnPaint(PaintEventArgs pe)
+		//{
+		//	base.OnPaint(pe);
+		//	lock (this.RazorLock)
+		//		Render();
+		//}
 
 		void Render()
 		{
 			if (curTicks != long.MinValue)
 			{
-				//long realTicks = Stopwatch.GetTimestamp(), dt = realTicks - curTicks;
-				//Stats.Add(dt / 1e4);
+				long realTicks = Stopwatch.GetTimestamp(), dt = realTicks - curTicks;
+				Stats.Add(dt * 1e3 / Stopwatch.Frequency);
 				//BiStats.Add(n, curTicks * 1e3 / Stopwatch.Frequency);
-				Stats.Add(n * msInTimerTick - curTicks * 1e3 / Stopwatch.Frequency);
+				//Stats.Add(n * msInTimerTick - curTicks * 1e3 / Stopwatch.Frequency);
 				//curTicks = realTicks;
 
 				// Tested on:
@@ -83,6 +98,7 @@ namespace TestShifts
 				// YODA: 24%, 65 FPS.
 				// SEASHELL: 18%, 64 FPS
 				int x = (int)((curTicks / 5000) % this.ClientSize.Width);
+		
 				//PlaceBitmapInt(RazorGFX, tbmp.Bitmap, x);
 
 				// 3. DrawImageUnscaled

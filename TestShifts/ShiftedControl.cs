@@ -23,7 +23,7 @@ namespace TestShifts
 		long curTicks, n;
 		double msInTimerTick;
 
-		System.Threading.Timer timer;
+		MultimediaTimer.AccurateTimer timer;
 		
 		public ShiftedControl()
 		{
@@ -36,17 +36,14 @@ namespace TestShifts
 			int min, max, cur;
 			MultimediaTimer.AccurateTimer.QueryTimerResolution(out min, out max, out cur);
 			msInTimerTick = min / 1e4;
-
-			timer = new System.Threading.Timer(TimerTick);
-
 		}
 
 		public void Start()
 		{
-			timer.Change(10, 15);
+			timer = new MultimediaTimer.AccurateTimer(TimerTick, 15);
 		}
 
-		void TimerTick(object state)
+		void TimerTick()
 		{
 			Shift(Stopwatch.GetTimestamp());
 		}

@@ -40,12 +40,20 @@ namespace TestShifts
 		{
 			n++;
 			curTicks = ticks;
+			//lock (this.RazorLock)
+			//	Render();
 			Invalidate();
 		}
 
 		protected override void OnPaint(PaintEventArgs pe)
 		{
 			base.OnPaint(pe);
+			lock (this.RazorLock)
+				Render();
+		}
+
+		void Render()
+		{
 			if (curTicks != long.MinValue)
 			{
 				//long realTicks = Stopwatch.GetTimestamp(), dt = realTicks - curTicks;
@@ -86,7 +94,7 @@ namespace TestShifts
 				// SEASHELL: 13-14%
 				//PlaceBitmapUnsafe(RazorBMP, tbmp.Bitmap, x);
 
-				// 4'. unsafe memcpy copy (int*w)*h + 2*(Lock+Unlock)Bits
+				// 4'. unsafe memcpy (int*w)*h + 2*(Lock+Unlock)Bits
 				// YODA: 6.2%
 				// SEASHELL: 6.8%
 				PlaceBitmapUnsafe2(RazorBMP, tbmp.Bitmap, x);

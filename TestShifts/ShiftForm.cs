@@ -18,7 +18,7 @@ namespace TestShifts
 		public ShiftForm()
 		{
 			InitializeComponent();
-			startTicks = Stopwatch.GetTimestamp();
+			startTicks = 0;// Stopwatch.GetTimestamp();
 		}
 
 		private void secondTimer_Tick(object sender, EventArgs e)
@@ -31,7 +31,7 @@ namespace TestShifts
 
 		private void shiftTimer_Tick(object sender, EventArgs e)
 		{
-			//shiftedControl.Shift(Stopwatch.GetTimestamp() - startTicks);
+			shiftedControl.Shift(Stopwatch.GetTimestamp() - startTicks);
 		}
 
 		protected override void OnLoad(EventArgs e)

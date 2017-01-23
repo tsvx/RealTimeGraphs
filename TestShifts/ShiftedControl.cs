@@ -23,7 +23,7 @@ namespace TestShifts
 		long curTicks, n;
 		double msInTimerTick;
 
-		MultimediaTimer.AccurateTimer timer;
+		//MultimediaTimer.AccurateTimer timer;
 		
 		public ShiftedControl()
 		{
@@ -40,31 +40,31 @@ namespace TestShifts
 
 		public void Start()
 		{
-			timer = new MultimediaTimer.AccurateTimer(TimerTick, 15);
+			//timer = new MultimediaTimer.AccurateTimer(TimerTick, 15);
 		}
 
-		void TimerTick()
-		{
-			Shift(Stopwatch.GetTimestamp());
-		}
+		//void TimerTick()
+		//{
+		//	Shift(Stopwatch.GetTimestamp());
+		//}
 
 		public void Shift(long ticks)
 		{
 			n++;
 			curTicks = ticks;
-			lock (this.RazorLock)
-				Render();
-			//Invalidate();
+			//lock (this.RazorLock)
+			//	Render();
+			Invalidate();
 		}
 
-		//protected override void OnPaint(PaintEventArgs pe)
-		//{
-		//	base.OnPaint(pe);
-		//	lock (this.RazorLock)
-		//		Render();
-		//}
+		protected override void OnPaint(PaintEventArgs pe)
+		{
+			base.OnPaint(pe);
+			lock (this.RazorLock)
+				Render(pe.Graphics);
+		}
 
-		void Render()
+		void Render(Graphics g)
 		{
 			if (curTicks != long.MinValue)
 			{
@@ -110,12 +110,13 @@ namespace TestShifts
 				// 4'. unsafe memcpy (int*w)*h + 2*(Lock+Unlock)Bits
 				// YODA: 6.2%
 				// SEASHELL: 6.8%
-				PlaceBitmapUnsafe2(RazorBMP, tbmp.Bitmap, x);
+				//PlaceBitmapUnsafe2(RazorBMP, tbmp.Bitmap, x);
 
 				// 5. SetDIBitsToDevice + (Lock/Unlock)Bits + (Get/Release)Hdc
 				// YODA: 10.0%
 				// SeaShell: 11%
 				//PlaceBitmapSetDIBitsToDevice(RazorGFX, tbmp.Bitmap, x);
+				PlaceBitmapSetDIBitsToDevice(g, tbmp.Bitmap, x);
 
 				// 6. BitBlt + 2*(Get/Release)Hdc + GetHBitmap/DeleteObject + 2*SelectObject
 				// YODA: 38 FPS, but can be cached (Bitmap.GetHBitmap and hDCs)
@@ -123,7 +124,7 @@ namespace TestShifts
 				//PlaceBitmapBitBlt(RazorGFX, tbmp.Bitmap, x);
 			}
 
-			this.RazorPaint();
+			//this.RazorPaint();
 			FramesCounter++;
 		}
 

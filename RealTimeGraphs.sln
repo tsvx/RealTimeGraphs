@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestShifts", "TestShifts\Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathStat", "MathStat\MathStat.csproj", "{87B50C9B-3A41-41A4-BF29-52C3D823D875}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timer", "Timer\Timer.csproj", "{DE2611C9-8415-44DE-ACEF-700F920D1BBC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultimediaTimer", "MultimediaTimer\MultimediaTimer.csproj", "{DE2611C9-8415-44DE-ACEF-700F920D1BBC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

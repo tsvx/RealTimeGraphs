@@ -5,7 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 
-namespace Timer
+namespace MultimediaTimer
 {
     public class TestAccTimer
     {

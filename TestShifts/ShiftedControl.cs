@@ -47,7 +47,7 @@ namespace TestShifts
 		{
 			tbmp = new TestBitmap(this.BackColor, this.ForeColor);
 			tbmp.Resize(this.ClientSize.Width, this.ClientSize.Height);
-			timer = new MultimediaTimer.AccurateTimer(TimerTick, 25);
+			timer = new MultimediaTimer.AccurateTimer(TimerTick, 16);
 			//timer.Change(10, 15);
 		}
 
@@ -77,9 +77,11 @@ namespace TestShifts
 		{
 			if (curTicks != long.MinValue)
 			{
+				double ms = curTicks * 1e3 / Stopwatch.Frequency;
+				double pixels = (ms / 2) % this.ClientSize.Width;
 				//long realTicks = Stopwatch.GetTimestamp(), dt = realTicks - curTicks;
 				//Stats.Add(dt * 1e3 / Stopwatch.Frequency);
-				BiStats.Add(n, curTicks * 1e3 / Stopwatch.Frequency);
+				BiStats.Add(n, ms);
 				//Stats.Add(n * msInTimerTick - curTicks * 1e3 / Stopwatch.Frequency);
 				//curTicks = realTicks;
 
@@ -97,14 +99,13 @@ namespace TestShifts
 				// 1. float DrawImage
 				// YODA: 12 FPS, 25%
 				// SEASHELL: 64 FPS, 18%
-				//float fx = (curTicks / 50000f) % this.ClientSize.Width;
+				//float fx = (float)pixels;
 				//PlaceBitmapFloat(RazorGFX, tbmp.Bitmap, fx);
 
 				// 2. int DrawImage
 				// YODA: 24%, 65 FPS.
 				// SEASHELL: 18%, 64 FPS
-				int x = (int)((curTicks / 50000) % this.ClientSize.Width);
-		
+				int x = (int)pixels;
 				//PlaceBitmapInt(RazorGFX, tbmp.Bitmap, x);
 
 				// 3. DrawImageUnscaled
@@ -139,9 +140,12 @@ namespace TestShifts
 
 		protected override void OnResize(EventArgs e)
 		{
-			base.OnResize(e);
-			if (Created && tbmp != null)
-				tbmp.Resize(this.ClientSize.Width, this.ClientSize.Height);
+			lock (this.RazorLock)
+			{
+				base.OnResize(e);
+				if (Created && tbmp != null)
+					tbmp.Resize(this.ClientSize.Width, this.ClientSize.Height);
+			}
 		}
 
 		void PlaceBitmapDummy(Graphics dstGfx, Bitmap srcBmp, int x)

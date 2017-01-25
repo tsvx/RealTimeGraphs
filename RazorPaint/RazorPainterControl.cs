@@ -15,7 +15,7 @@ namespace RazorGDIPainter
 	{
 		protected override void Dispose(bool disposing)
 		{
-			lock (this)
+			lock (RazorLock)
 			{
 				if (RazorGFX != null) RazorGFX.Dispose();
 				if (RazorBMP != null) RazorBMP.Dispose();

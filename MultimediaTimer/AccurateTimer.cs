@@ -5,9 +5,10 @@ using System.Runtime.InteropServices;
 
 namespace MultimediaTimer
 {
+	// Needs improvement, see http://www.pinvoke.net/default.aspx/winmm.timesetevent
     public class AccurateTimer : IDisposable
     {
-        private delegate void TimerEventDel(int id, int msg, IntPtr user, int dw1, int dw2);
+		private delegate void TimerEventDel(uint id, uint msg, UIntPtr user, UIntPtr dw1, UIntPtr dw2);
         private const int TIME_PERIODIC = 1;
         private const int EVENT_TYPE = TIME_PERIODIC;// + 0x100;  // TIME_KILL_SYNCHRONOUS causes a hang ?!
 
@@ -71,7 +72,7 @@ namespace MultimediaTimer
             System.Threading.Thread.Sleep(100);// Ensure callbacks are drained
         }
 
-        private void TimerCallback(int id, int msg, IntPtr user, int dw1, int dw2)
+		private void TimerCallback(uint id, uint msg, UIntPtr user, UIntPtr dw1, UIntPtr dw2)
         {
 			mAction();
         }

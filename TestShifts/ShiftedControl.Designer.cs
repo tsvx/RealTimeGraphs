@@ -38,6 +38,7 @@
 			// ShiftedControl
 			// 
 			this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ShiftedControl_MouseClick);
+			this.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ShiftedControl_MouseClick);
 			this.ResumeLayout(false);
 
 		}

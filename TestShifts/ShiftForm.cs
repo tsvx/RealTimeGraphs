@@ -26,8 +26,8 @@ namespace TestShifts
 			this.Text = String.Format("{0} [monitor {1} vfps] [real {2} fps], timer period {3} ms, move {4:G5} ms/pixel = {5:G4} pixels/period = {6:G4} pixels/vframe = {7:G4} ms/screen",
 				this.Name, shiftedControl.MonitorRefreshRate, df,
 				shiftedControl.TimerPeriod, shiftedControl.Ms2pixel,
-				shiftedControl.TimerPeriod / shiftedControl.Ms2pixel,
-				(1000d / shiftedControl.MonitorRefreshRate) / shiftedControl.Ms2pixel,
+				shiftedControl.PixelsInPeriod,
+				shiftedControl.PixelsInVRate,
 				shiftedControl.Ms2pixel * shiftedControl.ClientSize.Width
 			);
 			prevFrames = frames;

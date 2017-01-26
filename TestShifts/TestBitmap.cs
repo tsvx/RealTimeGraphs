@@ -16,7 +16,7 @@ namespace TestShifts
 	{
 		public Bitmap Bitmap;
 		Color cBack, cGraph;
-		Pen pen;
+		Pen graphPen, linesPen;
 		PointF[] points;
 
 		static SinusData[] graphs = new SinusData[]
@@ -31,7 +31,8 @@ namespace TestShifts
 		{
 			cBack = backColor;
 			cGraph = graphColor;
-			pen = new Pen(cGraph, 2);
+			graphPen = new Pen(cGraph, 2);
+			linesPen = new Pen(Color.FromArgb(150, Color.Red), 2);
 		}
 
 		void DrawSinus(Graphics g, int width, Rectangle r, SinusData s)
@@ -44,10 +45,10 @@ namespace TestShifts
 				double j = r.Top + (1 - y) / 2 * r.Height;
 				points[i] = new PointF(i + r.Left, (float)j);
 			}
-			g.DrawLines(pen, points);
+			g.DrawLines(graphPen, points);
 		}
 
-		public void Resize(int width, int height)
+		public void Resize(int width, int height, float linesPeriod)
 		{
 			Bitmap = new Bitmap(width * 2, height);
 			points = new PointF[2 * width];
@@ -58,6 +59,12 @@ namespace TestShifts
 				var r = new Rectangle(0, 0, 2 * width, height);
 				foreach (var sinus in graphs)
 					DrawSinus(g, width, r, sinus);
+				g.CompositingMode = CompositingMode.SourceOver;
+				if (linesPeriod > 0)
+				{
+					for (float x = r.Left + 1; x < r.Right; x += linesPeriod)
+						g.DrawLine(linesPen, x, r.Top, x, r.Bottom);					
+				}
 			}
 		}
 
@@ -65,8 +72,10 @@ namespace TestShifts
 		{
 			if (Bitmap != null)
 				Bitmap.Dispose();
-			if (pen != null)
-				pen.Dispose();
+			if (graphPen != null)
+				graphPen.Dispose();
+			if (linesPen != null)
+				linesPen.Dispose();
 			points = null;
 		}
 	}

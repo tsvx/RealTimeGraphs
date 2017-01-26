@@ -28,20 +28,26 @@ namespace TestShifts
 		double ms2pixel = defMs2pixel;
 		public double Ms2pixel { get { return ms2pixel; } }
 
-		const int defTimerPeriod = 16;
+		const int defTimerPeriod = 17;
 		int timerPeriod = defTimerPeriod;
 		public int TimerPeriod { get { return timerPeriod; } }
 
+		public double PixelsInPeriod { get { return timerPeriod / ms2pixel; } }
+		public double PixelsInVRate { get { return (1000D / MonitorRefreshRate) / ms2pixel; } }
+
+		int monitorRefreshRate = -1;
 		public int MonitorRefreshRate
 		{
 			get
 			{
-				return GdiProxy.GetDeviceCaps(GdiProxy.DeviceCap.VREFRESH);
+				if (monitorRefreshRate < 0)
+					monitorRefreshRate = GdiProxy.GetDeviceCaps(GdiProxy.DeviceCap.VREFRESH);
+				return monitorRefreshRate;
 			}
 		}
 
 		MultimediaTimer.AccurateTimer timer;
-		
+
 		public ShiftedControl()
 		{
 			InitializeComponent();
@@ -57,10 +63,20 @@ namespace TestShifts
 		public void Start()
 		{
 			tbmp = new TestBitmap(this.BackColor, this.ForeColor);
-			tbmp.Resize(this.ClientSize.Width, this.ClientSize.Height);
+			tbmp.Resize(this.ClientSize.Width, this.ClientSize.Height, (float)PixelsInPeriod);
 			sw.Start();
 			timer = new MultimediaTimer.AccurateTimer(TimerTick, timerPeriod);
-	}
+		}
+
+		protected override void OnResize(EventArgs e)
+		{
+			lock (this.RazorLock)
+			{
+				base.OnResize(e);
+				if (Created && tbmp != null)
+					tbmp.Resize(this.ClientSize.Width, this.ClientSize.Height, (float)PixelsInPeriod);
+			}
+		}
 
 		void TimerTick()
 		{
@@ -146,20 +162,10 @@ namespace TestShifts
 			FramesCounter++;
 		}
 
-		protected override void OnResize(EventArgs e)
-		{
-			lock (this.RazorLock)
-			{
-				base.OnResize(e);
-				if (Created && tbmp != null)
-					tbmp.Resize(this.ClientSize.Width, this.ClientSize.Height);
-			}
-		}
-
 		void PlaceBitmapDummy(Graphics dstGfx, Bitmap srcBmp, int x)
 		{
 		}
-				
+
 		void PlaceBitmapFloat(Graphics dstGfx, Bitmap srcBmp, float x)
 		{
 			var rDst = (RectangleF)this.ClientRectangle;
@@ -195,7 +201,7 @@ namespace TestShifts
 				pd += dstAdd;
 				ps += srcAdd;
 			}
-			
+
 			dst.UnlockBits(bdDst);
 			src.UnlockBits(bdSrc);
 		}

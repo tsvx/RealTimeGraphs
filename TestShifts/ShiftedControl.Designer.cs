@@ -33,7 +33,13 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			components = new System.ComponentModel.Container();
+			this.SuspendLayout();
+			// 
+			// ShiftedControl
+			// 
+			this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ShiftedControl_MouseClick);
+			this.ResumeLayout(false);
+
 		}
 
 		#endregion

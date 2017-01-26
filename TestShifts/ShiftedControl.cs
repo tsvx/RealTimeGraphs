@@ -16,27 +16,38 @@ namespace TestShifts
 	public partial class ShiftedControl : RazorGDIPainter.RazorPainterControl
 	{
 		public int FramesCounter { get; private set; }
-		public StatsAccum Stats;
-		public BiStatsAccum BiStats;
+		//public StatsAccum Stats;
+		//public BiStatsAccum BiStats;
 
 		TestBitmap tbmp;
-		long curTicks, n;
-		double msInTimerTick;
+		long curTicks;
+		Stopwatch sw = new Stopwatch();
+		bool paused;
+
+		const double defMs2pixel = 2;
+		double ms2pixel = defMs2pixel;
+		public double Ms2pixel { get { return ms2pixel; } }
+
+		const int defTimerPeriod = 16;
+		int timerPeriod = defTimerPeriod;
+		public int TimerPeriod { get { return timerPeriod; } }
+
+		public int MonitorRefreshRate
+		{
+			get
+			{
+				return GdiProxy.GetDeviceCaps(GdiProxy.DeviceCap.VREFRESH);
+			}
+		}
 
 		MultimediaTimer.AccurateTimer timer;
-		//System.Threading.Timer timer;
 		
 		public ShiftedControl()
 		{
-			Stats = new StatsAccum();
-			BiStats = new BiStatsAccum(15, true);
 			InitializeComponent();
 			curTicks = long.MinValue;
-			n = 0;
-			int min, max, cur;
-			MultimediaTimer.AccurateTimer.QueryTimerResolution(out min, out max, out cur);
-			msInTimerTick = min / 1e4;
-			//timer = new System.Threading.Timer(TimerTick);
+			//int min, max, cur;
+			//MultimediaTimer.AccurateTimer.QueryTimerResolution(out min, out max, out cur);
 		}
 
 		// OnPaint, WM_TIMER:	s = 2.4 ms
@@ -47,42 +58,40 @@ namespace TestShifts
 		{
 			tbmp = new TestBitmap(this.BackColor, this.ForeColor);
 			tbmp.Resize(this.ClientSize.Width, this.ClientSize.Height);
-			timer = new MultimediaTimer.AccurateTimer(TimerTick, 16);
-			//timer.Change(10, 15);
-		}
+			sw.Start();
+			timer = new MultimediaTimer.AccurateTimer(TimerTick, timerPeriod);
+	}
 
 		void TimerTick()
-		//void TimerTick(object state)
 		{
-			Shift(Stopwatch.GetTimestamp());
+			if (!paused)
+				Shift(sw.ElapsedTicks);
 		}
 
 		public void Shift(long ticks)
 		{
-			n++;
 			curTicks = ticks;
 			lock (this.RazorLock)
-				Render(null);
-			//Invalidate();
+				Render();
 		}
 
 		protected override void OnPaint(PaintEventArgs pe)
 		{
 			base.OnPaint(pe);
+			// pe.Graphics -- unused, but somehow used in RazorPaint().
 			lock (this.RazorLock)
-				Render(pe.Graphics);
+				Render();
 		}
 
-		void Render(Graphics g)
+		void Render()
 		{
 			if (curTicks != long.MinValue)
 			{
 				double ms = curTicks * 1e3 / Stopwatch.Frequency;
-				double pixels = (ms / 2) % this.ClientSize.Width;
-				//long realTicks = Stopwatch.GetTimestamp(), dt = realTicks - curTicks;
+				double pixels = (ms / ms2pixel) % this.ClientSize.Width;
+				//long realTicks = sw.ElapsedTicks, dt = realTicks - curTicks;
 				//Stats.Add(dt * 1e3 / Stopwatch.Frequency);
-				BiStats.Add(n, ms);
-				//Stats.Add(n * msInTimerTick - curTicks * 1e3 / Stopwatch.Frequency);
+				//BiStats.Add(n, ms);
 				//curTicks = realTicks;
 
 				// Tested on:
@@ -126,7 +135,6 @@ namespace TestShifts
 				// YODA: 10.0%
 				// SeaShell: 11%
 				//PlaceBitmapSetDIBitsToDevice(RazorGFX, tbmp.Bitmap, x);
-				//PlaceBitmapSetDIBitsToDevice(g, tbmp.Bitmap, x);
 
 				// 6. BitBlt + 2*(Get/Release)Hdc + GetHBitmap/DeleteObject + 2*SelectObject
 				// YODA: 38 FPS, but can be cached (Bitmap.GetHBitmap and hDCs)
@@ -223,5 +231,15 @@ namespace TestShifts
 			Debug.Assert(rslt);
 		}
 
+		private void ShiftedControl_MouseClick(object sender, MouseEventArgs e)
+		{
+			if (e.Button != MouseButtons.Left)
+				return;
+			paused ^= true;
+			if (paused)
+				sw.Stop();
+			else
+				sw.Start();
+		}
 	}
 }

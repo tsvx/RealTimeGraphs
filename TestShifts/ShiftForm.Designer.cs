@@ -30,7 +30,6 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			this.secondTimer = new System.Windows.Forms.Timer(this.components);
-			this.shiftTimer = new System.Windows.Forms.Timer(this.components);
 			this.shiftedControl = new TestShifts.ShiftedControl();
 			this.SuspendLayout();
 			// 
@@ -39,12 +38,6 @@
 			this.secondTimer.Enabled = true;
 			this.secondTimer.Interval = 1000;
 			this.secondTimer.Tick += new System.EventHandler(this.secondTimer_Tick);
-			// 
-			// shiftTimer
-			// 
-			this.shiftTimer.Enabled = true;
-			this.shiftTimer.Interval = 15;
-			this.shiftTimer.Tick += new System.EventHandler(this.shiftTimer_Tick);
 			// 
 			// shiftedControl
 			// 
@@ -75,7 +68,6 @@
 
 		private ShiftedControl shiftedControl;
 		private System.Windows.Forms.Timer secondTimer;
-		private System.Windows.Forms.Timer shiftTimer;
 	}
 }
 

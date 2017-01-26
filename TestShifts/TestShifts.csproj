@@ -70,6 +70,9 @@
       <DependentUpon>ShiftedControl.cs</DependentUpon>
     </Compile>
     <Compile Include="TestBitmap.cs" />
+    <EmbeddedResource Include="ShiftedControl.resx">
+      <DependentUpon>ShiftedControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ShiftForm.resx">
       <DependentUpon>ShiftForm.cs</DependentUpon>
     </EmbeddedResource>

@@ -13,25 +13,24 @@ namespace TestShifts
 	public partial class ShiftForm : Form
 	{
 		int prevFrames;
-		long startTicks;
 
 		public ShiftForm()
 		{
 			InitializeComponent();
-			startTicks = Stopwatch.GetTimestamp();
 		}
 
 		private void secondTimer_Tick(object sender, EventArgs e)
 		{
 			int frames = shiftedControl.FramesCounter;
 			int df = frames - prevFrames;
-			this.Text = String.Format("{0} [{1} fps] {2}", this.Name, df, shiftedControl.BiStats.ToShortString());
+			this.Text = String.Format("{0} [monitor {1} vfps] [real {2} fps], timer period {3} ms, move {4:G5} ms/pixel = {5:G4} pixels/period = {6:G4} pixels/vframe = {7:G4} ms/screen",
+				this.Name, shiftedControl.MonitorRefreshRate, df,
+				shiftedControl.TimerPeriod, shiftedControl.Ms2pixel,
+				shiftedControl.TimerPeriod / shiftedControl.Ms2pixel,
+				(1000d / shiftedControl.MonitorRefreshRate) / shiftedControl.Ms2pixel,
+				shiftedControl.Ms2pixel * shiftedControl.ClientSize.Width
+			);
 			prevFrames = frames;
-		}
-
-		private void shiftTimer_Tick(object sender, EventArgs e)
-		{
-			//shiftedControl.Shift(Stopwatch.GetTimestamp() - startTicks);
 		}
 
 		protected override void OnLoad(EventArgs e)

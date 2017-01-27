@@ -42,8 +42,8 @@ namespace TestShifts
 		}
 
 		MultimediaTimer.AccurateTimer timer;
-		const int toff = 5;
-		int ttick = 0, nextTick = toff, nvframe = 0;
+		const uint toff = 5;
+		uint ttick = 0, nextTick = toff, nvframe = 0;
 
 		public ShiftedControl()
 		{
@@ -60,7 +60,7 @@ namespace TestShifts
 		public void Start()
 		{
 			tbmp = new TestBitmap(this.BackColor, this.ForeColor);
-			tbmp.Resize(this.ClientSize.Width, this.ClientSize.Height, (float)PixelsInVRate);
+			tbmp.Resize(this.ClientSize.Width, this.ClientSize.Height);//, (float)PixelsInVRate);
 			sw.Start();
 			timer = new MultimediaTimer.AccurateTimer(TimerTick, 1);
 		}
@@ -71,7 +71,7 @@ namespace TestShifts
 			{
 				base.OnResize(e);
 				if (Created && tbmp != null)
-					tbmp.Resize(this.ClientSize.Width, this.ClientSize.Height, (float)PixelsInVRate);
+					tbmp.Resize(this.ClientSize.Width, this.ClientSize.Height);//, (float)PixelsInVRate);
 			}
 		}
 
@@ -80,9 +80,12 @@ namespace TestShifts
 			if (++ttick < nextTick)
 				return;
 			nvframe++;
-			nextTick = (int)Math.Round(toff + nvframe * (1000d / MonitorRefreshRate));
+			nextTick = (uint)Math.Round(toff + nvframe * (1000d / MonitorRefreshRate));
 			if (!paused)
+			{
+				//Console.Write(" " + (nextTick - ttick));
 				Shift(sw.ElapsedTicks);
+			}
 		}
 
 		public void Shift(long ticks)
@@ -106,7 +109,8 @@ namespace TestShifts
 			{
 				double ms = curTicks * 1e3 / Stopwatch.Frequency;
 				double pixels = (ms / ms2pixel) % this.ClientSize.Width;
-				//long realTicks = sw.ElapsedTicks, dt = realTicks - curTicks;
+				long realTicks = sw.ElapsedTicks, dt = realTicks - curTicks;
+				Console.Write(" " + dt/10);
 				//Stats.Add(dt * 1e3 / Stopwatch.Frequency);
 				//BiStats.Add(n, ms);
 				//curTicks = realTicks;
@@ -244,7 +248,10 @@ namespace TestShifts
 				return;
 			paused ^= true;
 			if (paused)
+			{
 				sw.Stop();
+				Console.Write(" Paused");
+			}
 			else
 				sw.Start();
 		}

@@ -48,7 +48,7 @@ namespace TestShifts
 			g.DrawLines(graphPen, points);
 		}
 
-		public void Resize(int width, int height, float linesPeriod)
+		public void Resize(int width, int height, float linesPeriod = -1f)
 		{
 			Bitmap = new Bitmap(width * 2, height);
 			points = new PointF[2 * width];

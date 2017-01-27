@@ -28,11 +28,6 @@ namespace TestShifts
 		double ms2pixel = defMs2pixel;
 		public double Ms2pixel { get { return ms2pixel; } }
 
-		const int defTimerPeriod = 17;
-		int timerPeriod = defTimerPeriod;
-		public int TimerPeriod { get { return timerPeriod; } }
-
-		public double PixelsInPeriod { get { return timerPeriod / ms2pixel; } }
 		public double PixelsInVRate { get { return (1000D / MonitorRefreshRate) / ms2pixel; } }
 
 		int monitorRefreshRate = -1;
@@ -47,6 +42,8 @@ namespace TestShifts
 		}
 
 		MultimediaTimer.AccurateTimer timer;
+		const int toff = 5;
+		int ttick = 0, nextTick = toff, nvframe = 0;
 
 		public ShiftedControl()
 		{
@@ -63,9 +60,9 @@ namespace TestShifts
 		public void Start()
 		{
 			tbmp = new TestBitmap(this.BackColor, this.ForeColor);
-			tbmp.Resize(this.ClientSize.Width, this.ClientSize.Height, (float)PixelsInPeriod);
+			tbmp.Resize(this.ClientSize.Width, this.ClientSize.Height, (float)PixelsInVRate);
 			sw.Start();
-			timer = new MultimediaTimer.AccurateTimer(TimerTick, timerPeriod);
+			timer = new MultimediaTimer.AccurateTimer(TimerTick, 1);
 		}
 
 		protected override void OnResize(EventArgs e)
@@ -74,12 +71,16 @@ namespace TestShifts
 			{
 				base.OnResize(e);
 				if (Created && tbmp != null)
-					tbmp.Resize(this.ClientSize.Width, this.ClientSize.Height, (float)PixelsInPeriod);
+					tbmp.Resize(this.ClientSize.Width, this.ClientSize.Height, (float)PixelsInVRate);
 			}
 		}
 
 		void TimerTick()
 		{
+			if (++ttick < nextTick)
+				return;
+			nvframe++;
+			nextTick = (int)Math.Round(toff + nvframe * (1000d / MonitorRefreshRate));
 			if (!paused)
 				Shift(sw.ElapsedTicks);
 		}

@@ -43,7 +43,7 @@ namespace RazorGDIPainter
 		/// <summary>
 		/// Lock it to avoid resize/repaint race
 		/// </summary>
-		public readonly object RazorLock = new object();
+		protected readonly object RazorLock = new object();
 
 		public RazorPainterControl()
 		{

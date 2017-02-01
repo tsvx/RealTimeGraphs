@@ -9,6 +9,7 @@ using System.Drawing.Imaging;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace TestShifts
@@ -77,8 +78,15 @@ namespace TestShifts
 
 		void TimerTick()
 		{
-			if (++ttick < nextTick)
+			++ttick;
+			// uResearch results: one thread for all TimerTick invocations queued somewhere,
+			// and if one invocation runs longer than 1 ms, the next invocations batch run after that.
+			//if (nvframe < 10)
+			//	Console.Write(" {0}-{1}-{2}", ttick, Thread.CurrentThread.ManagedThreadId, sw.Elapsed.TotalMilliseconds);
+			if (ttick < nextTick)
 				return;
+			//if (nvframe < 10)
+			//	Console.Write('*');
 			nvframe++;
 			nextTick = (uint)Math.Round(toff + nvframe * (1000d / MonitorRefreshRate));
 			if (!paused)
@@ -105,12 +113,12 @@ namespace TestShifts
 
 		void Render()
 		{
+			long realTicks = sw.ElapsedTicks, dt = realTicks - curTicks;
+			//Console.Write(" " + dt/10);
 			if (curTicks != long.MinValue)
 			{
-				double ms = curTicks * 1e3 / Stopwatch.Frequency;
+				double ms = realTicks * 1e3 / Stopwatch.Frequency;
 				double pixels = (ms / ms2pixel) % this.ClientSize.Width;
-				long realTicks = sw.ElapsedTicks, dt = realTicks - curTicks;
-				Console.Write(" " + dt/10);
 				//Stats.Add(dt * 1e3 / Stopwatch.Frequency);
 				//BiStats.Add(n, ms);
 				//curTicks = realTicks;
@@ -165,6 +173,7 @@ namespace TestShifts
 
 			this.RazorPaint();
 			FramesCounter++;
+			//Console.Write(" {0,-4:G3}", (sw.ElapsedTicks - realTicks) * 1000d / Stopwatch.Frequency);
 		}
 
 		void PlaceBitmapDummy(Graphics dstGfx, Bitmap srcBmp, int x)

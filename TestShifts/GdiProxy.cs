@@ -13,7 +13,8 @@ namespace TestShifts
 	public class GdiProxy
 	{
 		[DllImport("gdi32")]
-		private extern static int SetDIBitsToDevice(HandleRef hDC, int xDest, int yDest, uint dwWidth, uint dwHeight, int XSrc, int YSrc, uint uStartScan, uint cScanLines, IntPtr lpvBits, ref BITMAPINFO lpbmi, uint fuColorUse);
+		private extern static int SetDIBitsToDevice(HandleRef hDC, int xDest, int yDest, uint dwWidth, uint dwHeight, int XSrc, int YSrc,
+			uint uStartScan, uint cScanLines, IntPtr lpvBits, ref BITMAPINFO lpbmi, uint fuColorUse);
 
 		[StructLayout(LayoutKind.Sequential)]
 		private struct BITMAPINFOHEADER

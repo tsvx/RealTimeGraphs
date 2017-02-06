@@ -101,6 +101,7 @@ namespace TestShifts
 			curTicks = ticks;
 			lock (this.RazorLock)
 				Render();
+			//this.Invalidate();
 		}
 
 		protected override void OnPaint(PaintEventArgs pe)

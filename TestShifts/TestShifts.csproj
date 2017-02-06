@@ -56,8 +56,11 @@
       <Link>RazorPainterControl.cs</Link>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="BlitPainter.cs" />
+    <Compile Include="DIBPainter.cs" />
     <Compile Include="GdiProxy.cs" />
     <Compile Include="GdiShift1.cs" />
+    <Compile Include="IPainter.cs" />
     <Compile Include="ShiftForm.cs">
       <SubType>Form</SubType>
     </Compile>

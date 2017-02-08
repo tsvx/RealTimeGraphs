@@ -11,5 +11,15 @@ namespace TestShifts
 		{
 			throw new NotImplementedException();
 		}
+
+		public void Assign(System.Drawing.Graphics gfx, System.Drawing.Rectangle rect, System.Drawing.Bitmap bmp)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void PlaceBitmap(int bmpX)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

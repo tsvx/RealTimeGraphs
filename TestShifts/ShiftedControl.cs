@@ -46,6 +46,8 @@ namespace TestShifts
 		const uint toff = 5;
 		uint ttick = 0, nextTick = toff, nvframe = 0;
 
+		IPainter painter = new DIBPainter();
+
 		public ShiftedControl()
 		{
 			InitializeComponent();
@@ -62,6 +64,7 @@ namespace TestShifts
 		{
 			tbmp = new TestBitmap(this.BackColor, this.ForeColor);
 			tbmp.Resize(this.ClientSize.Width, this.ClientSize.Height);//, (float)PixelsInVRate);
+			painter.Assign(this.RazorGFX, this.ClientRectangle, tbmp.Bitmap);
 			sw.Start();
 			timer = new MultimediaTimer.AccurateTimer(TimerTick, 1);
 		}
@@ -72,7 +75,10 @@ namespace TestShifts
 			{
 				base.OnResize(e);
 				if (Created && tbmp != null)
+				{
 					tbmp.Resize(this.ClientSize.Width, this.ClientSize.Height);//, (float)PixelsInVRate);
+					painter.Assign(this.RazorGFX, this.ClientRectangle, tbmp.Bitmap);
+				}
 			}
 		}
 
@@ -159,7 +165,7 @@ namespace TestShifts
 				// 4'. unsafe memcpy (int*w)*h + 2*(Lock+Unlock)Bits
 				// YODA: 6.2%
 				// SEASHELL: 6.8%
-				PlaceBitmapUnsafe2(RazorBMP, tbmp.Bitmap, x);
+				//PlaceBitmapUnsafe2(RazorBMP, tbmp.Bitmap, x);
 
 				// 5. SetDIBitsToDevice + (Lock/Unlock)Bits + (Get/Release)Hdc
 				// YODA: 10.0%
@@ -170,6 +176,9 @@ namespace TestShifts
 				// YODA: 38 FPS, but can be cached (Bitmap.GetHBitmap and hDCs)
 				// SeaShell: 50 FPS, 25%
 				//PlaceBitmapBitBlt(RazorGFX, tbmp.Bitmap, x);
+
+				// DIBPainter: 6.7%, ain't work - black screen
+				painter.PlaceBitmap(x);
 			}
 
 			this.RazorPaint();

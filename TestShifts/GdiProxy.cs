@@ -13,11 +13,11 @@ namespace TestShifts
 	public class GdiProxy
 	{
 		[DllImport("gdi32")]
-		private extern static int SetDIBitsToDevice(HandleRef hDC, int xDest, int yDest, uint dwWidth, uint dwHeight, int XSrc, int YSrc,
+		internal extern static int SetDIBitsToDevice(HandleRef hDC, int xDest, int yDest, uint dwWidth, uint dwHeight, int XSrc, int YSrc,
 			uint uStartScan, uint cScanLines, IntPtr lpvBits, ref BITMAPINFO lpbmi, uint fuColorUse);
 
 		[StructLayout(LayoutKind.Sequential)]
-		private struct BITMAPINFOHEADER
+		internal struct BITMAPINFOHEADER
 		{
 			static readonly int size = Marshal.SizeOf(typeof(BITMAPINFOHEADER));
 			static public int Size { get { return size; } }
@@ -36,7 +36,7 @@ namespace TestShifts
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
-		private struct BITMAPINFO
+		internal struct BITMAPINFO
 		{
 			public BITMAPINFOHEADER biHeader;
 			public int biColors;

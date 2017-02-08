@@ -86,13 +86,13 @@ namespace TestShifts
 		}
 
 		[DllImport("gdi32.dll")]
-		private static extern IntPtr SelectObject([In] HandleRef hdc, [In] HandleRef h);
+		internal static extern IntPtr SelectObject([In] HandleRef hdc, [In] HandleRef h);
 
 		[DllImport("gdi32.dll")]
-		private static extern bool DeleteObject([In] HandleRef h);
+		internal static extern bool DeleteObject([In] HandleRef h);
 
 		[DllImport("gdi32.dll")]
-		private static extern bool BitBlt(HandleRef hDCDest, int nXDest, int nYDest, int nWidth, int nHeight,
+		internal static extern bool BitBlt(HandleRef hDCDest, int nXDest, int nYDest, int nWidth, int nHeight,
 										HandleRef hDCSrc, int nXSrc, int nYSrc, TernaryRasterOperations dwRop);
 
 		public static bool BitBlt(Graphics gDst, Rectangle rect, Bitmap srcBmp, Point pSrc, TernaryRasterOperations rop)

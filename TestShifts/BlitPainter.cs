@@ -21,7 +21,7 @@ namespace TestShifts
 				return;
 			GdiProxy.SelectObject(hs, hOldObj);
 			GdiProxy.DeleteObject(hb);
-			gd.ReleaseHdc();
+			//gd.ReleaseHdc();
 			gs.ReleaseHdc();
 			gs.Dispose();
 			gd = gs = null;
@@ -36,7 +36,7 @@ namespace TestShifts
 			r = rect;
 			gs = Graphics.FromImage(bmp);
 			hs = new HandleRef(gs, gs.GetHdc());
-			hd = new HandleRef(gd, gd.GetHdc());
+			//hd = new HandleRef(gd, gd.GetHdc());
 			hb = new HandleRef(bmp, bmp.GetHbitmap());
 			hOldObj = new HandleRef(gs, GdiProxy.SelectObject(hs, hb));
 			if (hOldObj.Handle == IntPtr.Zero)
@@ -45,7 +45,9 @@ namespace TestShifts
 
 		public void PlaceBitmap(int bmpX)
 		{
+			hd = new HandleRef(gd, gd.GetHdc());
 			GdiProxy.BitBlt(hd, r.X, r.Y, r.Width, r.Height, hs, bmpX, 0, GdiProxy.TernaryRasterOperations.SRCCOPY);
+			gd.ReleaseHdc();
 		}
 	}
 }

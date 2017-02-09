@@ -20,7 +20,7 @@ namespace TestShifts
 		{
 			if (hDC.Handle != IntPtr.Zero && g != null)
 			{
-				g.ReleaseHdc(hDC.Handle);
+				//g.ReleaseHdc(hDC.Handle);
 				hDC = new HandleRef();
 			}
 			g = null;
@@ -45,17 +45,18 @@ namespace TestShifts
 					biSizeImage = (uint)(bmp.Width * bmp.Height) << 2
 				}
 			};
-			hDC = new HandleRef(g, g.GetHdc());
+			//hDC = new HandleRef(g, g.GetHdc());
 		}
 
 		public void PlaceBitmap(int bmpX)
 		{
 			if (g == null)
 				return;
-			//GdiProxy.SetDIBitsToDevice(g, r, b, bmpX, 0); -- works, but the code below does not.
+			hDC = new HandleRef(g, g.GetHdc());
 			var bd = b.LockBits(new Rectangle(0, 0, b.Width, b.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
 			GdiProxy.SetDIBitsToDevice(hDC, r.X, r.Y, (uint)r.Width, (uint)r.Height, bmpX, 0, 0, (uint)b.Height, bd.Scan0, ref _BI, 0);
 			b.UnlockBits(bd);
+			g.ReleaseHdc();
 		}
 	}
 }

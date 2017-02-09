@@ -46,7 +46,7 @@ namespace TestShifts
 		const uint toff = 5;
 		uint ttick = 0, nextTick = toff, nvframe = 0;
 
-		IPainter painter = new BlitPainter();
+		IPainter painter = new DIBPainter();
 
 		public ShiftedControl()
 		{
@@ -177,8 +177,8 @@ namespace TestShifts
 				// SeaShell: 50 FPS, 25%
 				//PlaceBitmapBitBlt(RazorGFX, tbmp.Bitmap, x);
 
-				// DIBPainter:  6.7%, ain't work - black screen
-				// BlitPainter: 7%, ain't work - black screen
+				// DIBPainter:  SEASHELL 11.0%, mustn't cache destination Graphics!
+				// BlitPainter: SEASHELL 12.3%, mustn't cache destination Graphics!
 				painter.PlaceBitmap(x);
 			}
 

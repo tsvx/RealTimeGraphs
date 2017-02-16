@@ -22,8 +22,8 @@
 					timer.Dispose();
 					timer = null;
 				}
-				if (painter != null)
-					painter.Dispose();
+				//if (painter != null)
+				//	painter.Dispose();
 			}
 			base.Dispose(disposing);
 		}

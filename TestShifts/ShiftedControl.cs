@@ -46,7 +46,7 @@ namespace TestShifts
 		const uint toff = 5;
 		uint ttick = 0, nextTick = toff, nvframe = 0;
 
-		IPainter painter = new BlitPainter();
+		//IPainter painter = new BlitPainter();
 
 		public ShiftedControl()
 		{
@@ -64,9 +64,9 @@ namespace TestShifts
 		{
 			tbmp = new TestBitmap(this.BackColor, this.ForeColor);
 			tbmp.Resize(this.ClientSize.Width, this.ClientSize.Height);//, (float)PixelsInVRate);
-			painter.Assign(this.RazorGFX, this.ClientRectangle, tbmp.Bitmap);
+			//painter.Assign(this.RazorGFX, this.ClientRectangle, tbmp.Bitmap);
 			sw.Start();
-			timer = new MultimediaTimer.AccurateTimer(TimerTick, 1);
+			//timer = new MultimediaTimer.AccurateTimer(TimerTick, 1);
 		}
 
 		protected override void OnResize(EventArgs e)
@@ -77,7 +77,7 @@ namespace TestShifts
 				if (Created && tbmp != null)
 				{
 					tbmp.Resize(this.ClientSize.Width, this.ClientSize.Height);//, (float)PixelsInVRate);
-					painter.Assign(this.RazorGFX, this.ClientRectangle, tbmp.Bitmap);
+					//painter.Assign(this.RazorGFX, this.ClientRectangle, tbmp.Bitmap);
 				}
 			}
 		}
@@ -98,7 +98,7 @@ namespace TestShifts
 			if (!paused)
 			{
 				//Console.Write(" " + (nextTick - ttick));
-				//Shift(sw.ElapsedTicks);
+				Shift(sw.ElapsedTicks);
 			}
 		}
 
@@ -165,7 +165,7 @@ namespace TestShifts
 				// 4'. unsafe memcpy (int*w)*h + 2*(Lock+Unlock)Bits
 				// YODA: 6.2%
 				// SEASHELL: 6.8%
-				//PlaceBitmapUnsafe2(RazorBMP, tbmp.Bitmap, x);
+				PlaceBitmapUnsafe2(RazorBMP, tbmp.Bitmap, x);
 
 				// 5. SetDIBitsToDevice + (Lock/Unlock)Bits + (Get/Release)Hdc
 				// YODA: 10.0%
@@ -179,7 +179,7 @@ namespace TestShifts
 
 				// DIBPainter:  YODA 8.9%, SEASHELL 11.0%, mustn't cache destination Graphics!
 				// BlitPainter: YODA 9.6%, SEASHELL 12.3%, mustn't cache destination Graphics!
-				painter.PlaceBitmap(x);
+				//painter.PlaceBitmap(x);
 			}
 
 			this.RazorPaint();

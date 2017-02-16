@@ -98,7 +98,7 @@ namespace TestShifts
 			if (!paused)
 			{
 				//Console.Write(" " + (nextTick - ttick));
-				Shift(sw.ElapsedTicks);
+				//Shift(sw.ElapsedTicks);
 			}
 		}
 

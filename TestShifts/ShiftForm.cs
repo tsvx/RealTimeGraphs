@@ -17,6 +17,7 @@ namespace TestShifts
 		public ShiftForm()
 		{
 			InitializeComponent();
+			System.Windows.Media.CompositionTarget.Rendering += Show;
 		}
 
 		private void secondTimer_Tick(object sender, EventArgs e)
@@ -30,6 +31,11 @@ namespace TestShifts
 				shiftedControl.Ms2pixel * shiftedControl.ClientSize.Width
 			);
 			prevFrames = frames;
+		}
+
+		private void Show(object sender, EventArgs args)
+		{
+			shiftedControl.Shift(Stopwatch.GetTimestamp());
 		}
 
 		protected override void OnLoad(EventArgs e)

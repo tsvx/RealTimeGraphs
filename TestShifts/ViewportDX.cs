@@ -7,6 +7,8 @@ using DX = SlimDX.Direct3D9;
 
 namespace TestShifts
 {
+	// Copypasted from http://www.gamedev.ru/code/articles/slimdx_d3d9
+
 	public struct ViewportParams
 	{
 		public int WindowHeight;

@@ -43,15 +43,23 @@ namespace TestShifts
 		}
 
 		MultimediaTimer.AccurateTimer timer;
-		const uint toff = 5;
-		uint ttick = 0, nextTick = toff, nvframe = 0;
+		uint toff = 5;
+		uint ttick = 0, nextTick = 0, nvframe = 0;
 
 		//IPainter painter = new BlitPainter();
+
+		ViewportDX viewport;
 
 		public ShiftedControl()
 		{
 			InitializeComponent();
 			curTicks = long.MinValue;
+			viewport = new ViewportDX(new ViewportParams
+			{
+				WindowHeight = 1,
+				WindowWidth = 1,
+				FullScreen = false
+			});
 			//int min, max, cur;
 			//MultimediaTimer.AccurateTimer.QueryTimerResolution(out min, out max, out cur);
 		}
@@ -66,7 +74,7 @@ namespace TestShifts
 			tbmp.Resize(this.ClientSize.Width, this.ClientSize.Height);//, (float)PixelsInVRate);
 			//painter.Assign(this.RazorGFX, this.ClientRectangle, tbmp.Bitmap);
 			sw.Start();
-			//timer = new MultimediaTimer.AccurateTimer(TimerTick, 1);
+			timer = new MultimediaTimer.AccurateTimer(TimerTick, 1);
 		}
 
 		protected override void OnResize(EventArgs e)
@@ -180,6 +188,9 @@ namespace TestShifts
 				// DIBPainter:  YODA 8.9%, SEASHELL 11.0%, mustn't cache destination Graphics!
 				// BlitPainter: YODA 9.6%, SEASHELL 12.3%, mustn't cache destination Graphics!
 				//painter.PlaceBitmap(x);
+				var st = viewport.GetRasterStatus();
+				string s = String.Format(" {0}, {1}", st.InVBlank, st.Scanline);
+				RazorGFX.DrawString(s, SystemFonts.CaptionFont, SystemBrushes.Window, 0, 0);
 			}
 
 			this.RazorPaint();

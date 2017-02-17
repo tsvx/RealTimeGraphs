@@ -17,7 +17,7 @@ namespace TestShifts
 		public ShiftForm()
 		{
 			InitializeComponent();
-			System.Windows.Media.CompositionTarget.Rendering += Show;
+			//System.Windows.Media.CompositionTarget.Rendering += Show;
 		}
 
 		private void secondTimer_Tick(object sender, EventArgs e)

@@ -24,6 +24,8 @@
 				}
 				//if (painter != null)
 				//	painter.Dispose();
+				if (viewport != null)
+					viewport.Dispose();
 			}
 			base.Dispose(disposing);
 		}

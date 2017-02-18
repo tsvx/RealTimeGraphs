@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
 
-namespace TestShifts
+namespace GuiUtils
 {
 	public class GdiProxy
 	{

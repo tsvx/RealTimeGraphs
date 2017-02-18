@@ -1,4 +1,5 @@
-﻿using NIIT.Utils;
+﻿using GuiUtils;
+using NIIT.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -188,8 +189,9 @@ namespace TestShifts
 				// DIBPainter:  YODA 8.9%, SEASHELL 11.0%, mustn't cache destination Graphics!
 				// BlitPainter: YODA 9.6%, SEASHELL 12.3%, mustn't cache destination Graphics!
 				//painter.PlaceBitmap(x);
-				var st = viewport.GetRasterStatus();
-				string s = String.Format(" {0}, {1}", st.InVBlank, st.Scanline);
+				int scanline;
+				bool invblank = viewport.GetRasterStatus(out scanline);
+				string s = String.Format(" {0}, {1}", invblank, scanline);
 				RazorGFX.DrawString(s, SystemFonts.CaptionFont, SystemBrushes.Window, 0, 0);
 			}
 

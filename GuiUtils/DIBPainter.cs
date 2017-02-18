@@ -6,7 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace TestShifts
+namespace GuiUtils
 {
 	class DIBPainter : IPainter
 	{

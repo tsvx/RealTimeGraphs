@@ -5,7 +5,7 @@ using System.Text;
 using SlimDX;
 using DX = SlimDX.Direct3D9;
 
-namespace TestShifts
+namespace GuiUtils
 {
 	// Copypasted from http://www.gamedev.ru/code/articles/slimdx_d3d9
 
@@ -96,9 +96,16 @@ namespace TestShifts
 			D3D.Dispose();
 		}
 
-		public DX.RasterStatus GetRasterStatus()
+		/// <summary>
+		/// Proxy for <cref>SlimDX.Direct3D9.Device.GetRasterStatus</cref>
+		/// </summary>
+		/// <param name="scanline"><cref>SlimDX.Direct3D9.RasterStatus.Scanline</cref></param>
+		/// <returns><cref>SlimDX.Direct3D9.RasterStatus.InVBlank</cref></returns>
+		public bool GetRasterStatus(out int scanline)
 		{
-			return Device.GetRasterStatus(0);
+			var st = Device.GetRasterStatus(0);
+			scanline = st.Scanline;
+			return st.InVBlank;
 		}
 	}
 }

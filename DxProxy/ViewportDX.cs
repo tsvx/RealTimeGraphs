@@ -100,12 +100,13 @@ namespace DxProxy
 		/// Proxy for <cref>SlimDX.Direct3D9.Device.GetRasterStatus</cref>
 		/// </summary>
 		/// <param name="scanline"><cref>SlimDX.Direct3D9.RasterStatus.Scanline</cref></param>
-		/// <returns><cref>SlimDX.Direct3D9.RasterStatus.InVBlank</cref></returns>
-		public bool GetRasterStatus(out int scanline)
+		/// <returns>Either <cref>SlimDX.Direct3D9.RasterStatus.Scanline</cref>
+		/// if <cref>SlimDX.Direct3D9.RasterStatus.InVBlank</cref> is false, or
+		/// a negative number, if InVBlank is true.</returns>
+		public int GetScanline()
 		{
 			var st = Device.GetRasterStatus(0);
-			scanline = st.Scanline;
-			return st.InVBlank;
+			return st.InVBlank ? -1 : st.Scanline;
 		}
 	}
 }

@@ -2,7 +2,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Reference Include="SlimDX">
-      <HintPath>$(MSBuildThisFileDirectory)\lib\$(Platform)\SlimDX.dll</HintPath>
+      <HintPath>$(MSBuildThisFileDirectory)\$(Platform)\SlimDX.dll</HintPath>
       <Private>$(SlimDXPrivate)</Private>
     </Reference>
   </ItemGroup>

@@ -5,7 +5,7 @@ using System.Text;
 using SlimDX;
 using DX = SlimDX.Direct3D9;
 
-namespace GuiUtils
+namespace DxProxy
 {
 	// Copypasted from http://www.gamedev.ru/code/articles/slimdx_d3d9
 

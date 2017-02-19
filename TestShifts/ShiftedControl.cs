@@ -1,4 +1,5 @@
-﻿using GuiUtils;
+﻿using DxProxy;
+using GuiUtils;
 using NIIT.Utils;
 using System;
 using System.Collections.Generic;
